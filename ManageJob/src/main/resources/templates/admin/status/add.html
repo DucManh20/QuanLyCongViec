@@ -23,36 +23,21 @@
 <div style="margin-top: 100px" class="app-wrapper">
     <div class="app-content pt-3 p-md-3 p-lg-4">
         <div class="container-xl">
-            <h1 class="app-page-title">Add new user</h1>
+            <h1 class="app-page-title">Add new status</h1>
     <div class="row g-4 settings-section">
         <div class="app-card app-card-settings shadow-sm p-4">
             <div class="app-card-body">
-                <form class="settings-form" th:action="@{/user/add}"
-                      method="post" enctype="multipart/form-data">
+                <form class="settings-form" th:action="@{/status/add}"
+                      method="post">
                     <div class="mb-3">
-                        <label for="setting-input-1" class="form-label">Name
-</svg></span></label>
-                        <input type="text" class="form-control" id="setting-input-1" th:value="${name}" name="name" placeholder="Enter name">
-                        <span style="color: red" th:text="${errName}"></span>
+                        <label for="setting-input-1" class="form-label">Status</label>
+                        <input type="text" class="form-control" id="setting-input-1" th:value="${status1}" name="status1" placeholder="Enter status">
+                        <span style="color: red" th:text="${errStatus}"></span>
                     </div>
-                    <div class="mb-3">
-                        <label for="setting-input-2" class="form-label">Email</label>
-                        <input type="text" class="form-control" id="setting-input-2" th:value="${email}" name = "email" placeholder="Enter email">
-                        <span style="color: red" th:text="${errEmail}"></span>
-                    </div>
-                    <div class="mb-3">
-                        <label for="setting-input-3" class="form-label">Password</label>
-                        <input type="password" class="form-control" id="setting-input-3" value="" name = "password" placeholder="Enter password">
-                        <span style="color: red" th:text="${errPass}"></span>
-                    </div>
-                    <div class="mb-3">
-                        <label for="setting-input-3" class="form-label">Avatar</label>
-                        <input  multiple type="file" class="form-control"  value="" name = "file">
-                        <span style="color: red" th:text="${errAvatar}"></span>
-                    </div>
+
                     <button type="submit" class="btn app-btn-primary">Save Changes</button>
 
-                    <a class="btn app-btn-primary">List User</a>
+                    <a class="btn app-btn-primary" th:href="@{/status/list}">List Status</a>
 
                 </form>
             </div><!--//app-card-body-->

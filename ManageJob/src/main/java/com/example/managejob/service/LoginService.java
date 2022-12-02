@@ -34,6 +34,7 @@ public class LoginService implements UserDetailsService {
         User currentUser = new User(name, st.getPassword(), list);
         System.err.println(name);
         System.err.println(st.getPassword());
+        System.err.println(st.getRole());
         System.err.println(currentUser);
 // extend User de them thuoc tinh.
         return currentUser;

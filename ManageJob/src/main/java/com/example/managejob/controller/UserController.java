@@ -36,7 +36,7 @@ public class UserController {
     @PostMapping("/add")
     public String add(@ModelAttribute User user, Principal principal, Model model, HttpSession session) throws IOException {
         int k = 0;
-        Pattern pattern = Pattern.compile("^[a-zA-Z0-9]{4,}$");
+        Pattern pattern = Pattern.compile("^[a-zA-Z0-9 ]{4,}$");
         Matcher m = pattern.matcher(user.getName());
 
         Pattern pattern1 = Pattern.compile("^[0-9a-zA-Z]{4,}$");
@@ -47,22 +47,30 @@ public class UserController {
 
         User userCheck = ur.findByName(user.getName());
 
+        User emailCheck = ur.findByEmail(user.getEmail());
+
         if (userCheck != null) {
-            model.addAttribute("errName", "Tên người dùng đã tồn tại");
+            model.addAttribute("errName", "Duplicate username");
             k = 1;
         }
+
+        if (emailCheck != null) {
+            model.addAttribute("errEmail", "Duplicate email");
+            k = 1;
+        }
+
         if (!m.find()) {
-            model.addAttribute("errName", "Nhập độ dài lớn hơn 4 ký tự");
+            model.addAttribute("errName", "Enter length greater than 4 characters");
             k = 1;
         }
 
         if (!m1.find()) {
-            model.addAttribute("errPass", "Nhập độ dài lớn hơn 6 ký tự");
+            model.addAttribute("errPass", "Enter length greater than 4 characters");
             k = 1;
         }
 
         if (!m2.find()) {
-            model.addAttribute("errEmail", "Nhập sai định dạng(VD: A@gmail.com)");
+            model.addAttribute("errEmail", "Wrong format(VD: A@gmail.com)");
             k = 1;
         }
 
@@ -79,13 +87,13 @@ public class UserController {
                 user.getFile().transferTo(newFile);
                 user.setAvatar(filename); // save to db
             }
-//        user.setModifyBy(principal.getName());
+            user.setModifyBy(principal.getName());
             user.setRole("ROLE_MEMBER");
             user.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));
             user.setCreatedAt(new Date(System.currentTimeMillis()));
             ur.save(user);
         }
-        return "admin/user/add";
+        return "redirect:/user/list";
     }
 
     @RequestMapping("/download")
@@ -96,22 +104,27 @@ public class UserController {
     }
 
     @GetMapping("/edit")
-    public String edit(@RequestParam("id") int id, Model model) {
+    public String edit(@RequestParam("id") int id, Model model, HttpSession session) {
+        session.setAttribute("idEditUser", id);
         User user = ur.findById(id).orElse(null);
         model.addAttribute("user", user);
+
         return "admin/user/edit";
     }
 
     @PostMapping("/edit")
-    public String edit(@ModelAttribute("user") User user)
+    public String edit(@ModelAttribute("user") User user, HttpSession session, Principal principal)
             throws IllegalStateException, IOException {
         user.setCreatedAt(new Date(System.currentTimeMillis()));
-        User current = ur.findById(user.getId()).orElse(null);
+        User current = ur.findById((int) session.getAttribute("idEditUser")).orElse(null);
 
         if (current != null) {
             // lay du lieu can update tu edit qua current, de tranh mat du lieu cu
             current.setName(user.getName());
             current.setEmail(user.getEmail());
+            current.setModifyBy(principal.getName());
+            current.setCreatedAt(new Date(System.currentTimeMillis()));
+            current.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));
             if (!user.getFile().isEmpty()) {
                 final String UPLOAD_FOLDER = "D:/file/qlcv/user/";
                 String filename = user.getFile().getOriginalFilename();
@@ -140,14 +153,13 @@ public class UserController {
         model.addAttribute("totalPage", pageUser.getTotalPages());
         model.addAttribute("page", page);
         model.addAttribute("size", size);
-        model.addAttribute("listD", pageUser);
         long count = ur.count();
         model.addAttribute("count", count);
         return "admin/user/list";
     }
 
     @GetMapping("/search")
-    public String search(@RequestParam("search") String name, Model model,
+    public String search(@RequestParam("searchName") String name, Model model,
                          @RequestParam(value = "page", required = false) Integer page) {
         page = page == null || page < 0 ? 0 : page;
         int size = 5;
@@ -160,7 +172,6 @@ public class UserController {
         model.addAttribute("totalPages", pageUser.getTotalPages());
         model.addAttribute("page", page);
         model.addAttribute("size", size);
-        model.addAttribute("listD", pageUser);
         long count = ur.count();
         model.addAttribute("count", count);
         return "admin/user/list";

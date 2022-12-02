@@ -9,6 +9,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.Set;
 
 @Entity
 @Data
@@ -36,7 +37,7 @@ public class User {
     private String avatar;
 
     @CreatedDate
-    @Column(name="create_at",updatable = false)
+    @Column(name = "created_at", updatable = false)
     private Date createdAt;
 
     @Column(name = "modifi_by", length = 150)
@@ -44,5 +45,10 @@ public class User {
 
     @Transient
     private MultipartFile file;
+
+    @OneToMany(mappedBy = "user")
+    private Set<Task> tasks;
+
+
 
 }
