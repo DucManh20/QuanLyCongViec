@@ -1,12 +1,14 @@
 package com.example.managejob.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.stereotype.Controller;
 
 import javax.persistence.*;
-import java.util.Date;
+import javax.print.Doc;
+import java.util.List;
 
 @Entity
 @Data
@@ -22,28 +24,39 @@ public class Task {
     private String name;
 
     @Column(name = "estimate_hourse", length = 100)
-    private String estimate_hourse;
+    private String estimateHourse;
 
     @Column(name = "spent_time", length = 100)
-    private String spent_time;
+    private String spentTime;
 
     @Column(name = "start_date", length = 100)
-    private String start_date;
+    private String startDate;
 
     @Column(name = "end_date", length = 100)
-    private String end_date;
+    private String endDate;
+
+    @Column(name = "modifi_by", length = 150)
+    private String modifyBy;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user_id", nullable = false, referencedColumnName = "id")
+    @JsonBackReference
     private User user;
 
-    @OneToOne
-    @JoinColumn(name = "status_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "status_id", nullable = false, referencedColumnName = "id")
+    @JsonBackReference
     private Status status;
 
+    @OneToMany(mappedBy = "task",cascade =CascadeType.ALL)
+    @JsonManagedReference
+    private List<Comment> comments;
 
-
+    @OneToMany(mappedBy = "task",cascade =CascadeType.ALL)
+    @JsonManagedReference
+    private List<Document> documents;
 //    @ManyToOne(fetch = FetchType.LAZY)
 //    @JoinColumn(name = "job_id")
 //    private Job job;
 }
+

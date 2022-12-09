@@ -1,8 +1,16 @@
 package com.example.managejob.controller;
 
+import com.example.managejob.model.Status;
+import com.example.managejob.model.Task;
 import com.example.managejob.model.User;
+import com.example.managejob.model.UserExcelExporter;
+import com.example.managejob.repository.RoleRepository;
+import com.example.managejob.repository.StatusRepository;
+import com.example.managejob.repository.TaskRepository;
 import com.example.managejob.repository.UserRepository;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -17,29 +25,86 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.security.Principal;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @Controller
 @RequestMapping("user")
+@PreAuthorize("hasAnyRole('ROLE_ADMIN')")
 public class UserController {
+
+    private  static Logger logger = Logger.getLogger(UserController.class);
 
     @Autowired
     UserRepository ur;
 
+    @Autowired
+    TaskRepository tr;
+
+    @Autowired
+    StatusRepository sr;
+
+    @Autowired
+    RoleRepository rr;
+
     @GetMapping("add")
-    public String add() {
+    public String add(Model model) {
+        model.addAttribute("roleList", rr.findAll());
+
         return "admin/user/add";
+    }
+
+    @GetMapping("/account")
+    public String account(Principal principal, Model model, HttpSession session){
+        logger.info("Thong tin account: username = " + principal.getName());
+
+        int id =(int) session.getAttribute("idCurrentUser");
+
+        List<Task> listTask = tr.findListByStatus("Todo List", id);
+        int count = listTask.size();
+
+        List<Task> listTaskInProgress = tr.findListByStatus("In Progress", id);
+        int countI = listTaskInProgress.size();
+
+        List<Task> listTaskReview = tr.findListByStatus("Review", id);
+        int countR = listTaskReview.size();
+
+        List<Task> listTaskDone = tr.findListByStatus("Done", id);
+        int countD = listTaskDone.size();
+
+        List<Task> listAll = tr.findListUserById(id);
+        int countAll = listAll.size();
+
+
+        model.addAttribute("count", count);
+        model.addAttribute("countI", countI);
+        model.addAttribute("countR", countR);
+        model.addAttribute("countD", countD);
+        model.addAttribute("countAll", countAll);
+
+        User user = ur.findByName(principal.getName());
+        model.addAttribute("user", user);
+        return "admin/user/account";
+    }
+
+    @GetMapping("/accountById")
+    public String accountById(Principal principal, Model model, @RequestParam("id") int id){
+        User user = ur.findById(id).orElse(null);
+        model.addAttribute("user", user);
+        return "admin/user/account";
     }
 
     @PostMapping("/add")
     public String add(@ModelAttribute User user, Principal principal, Model model, HttpSession session) throws IOException {
         int k = 0;
-        Pattern pattern = Pattern.compile("^[a-zA-Z0-9 ]{4,}$");
+        Pattern pattern = Pattern.compile("^[^{]{4,150}$");
         Matcher m = pattern.matcher(user.getName());
 
-        Pattern pattern1 = Pattern.compile("^[0-9a-zA-Z]{4,}$");
+        Pattern pattern1 = Pattern.compile("^[0-9a-zA-Z]{4,150}$");
         Matcher m1 = pattern1.matcher(user.getPassword());
 
         Pattern pattern2 = Pattern.compile("^[a-zA-Z0-9_!#$%&'*+/=?`{|}~^.-]+@[a-zA-Z0-9.-]+$");
@@ -60,17 +125,17 @@ public class UserController {
         }
 
         if (!m.find()) {
-            model.addAttribute("errName", "Enter length greater than 4 characters");
+            model.addAttribute("errName", "Enter length greater than 4 characters and lesser 150 characters");
             k = 1;
         }
 
         if (!m1.find()) {
-            model.addAttribute("errPass", "Enter length greater than 4 characters");
+            model.addAttribute("errPass", "Enter length greater than 4 characters and lesser 150 characters");
             k = 1;
         }
 
         if (!m2.find()) {
-            model.addAttribute("errEmail", "Wrong format(VD: A@gmail.com)");
+            model.addAttribute("errEmail", "Wrong format (EX: A@gmail.com)");
             k = 1;
         }
 
@@ -78,6 +143,7 @@ public class UserController {
             model.addAttribute("name", user.getName());
             model.addAttribute("email", user.getEmail());
             model.addAttribute("pass", user.getPassword());
+            model.addAttribute("roleList", rr.findAll());
             return "admin/user/add";
         } else {
             if (!user.getFile().isEmpty()) {
@@ -88,9 +154,11 @@ public class UserController {
                 user.setAvatar(filename); // save to db
             }
             user.setModifyBy(principal.getName());
-            user.setRole("ROLE_MEMBER");
+//            user.setRole("ROLE_MEMBER");
             user.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));
             user.setCreatedAt(new Date(System.currentTimeMillis()));
+//            user.setRoleUser(user.getRoleUser());
+            System.err.println(user.getRoleUser().getRole());
             ur.save(user);
         }
         return "redirect:/user/list";
@@ -103,36 +171,98 @@ public class UserController {
         Files.copy(file.toPath(), response.getOutputStream());
     }
 
+    @GetMapping("/exportExcel")
+    public void exportData(HttpServletResponse response) throws IOException{
+        response.setContentType("application/octet-stream");
+        String headerKey = "Content-Disposition";
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd_HH");
+        String currentDateTime = dateFormat.format(new Date());
+        String fileName = "users_" + currentDateTime + ".xlsx";
+        String headerValue = "attachement; filename="+ fileName;
+        response.setHeader(headerKey, headerValue);
+
+        List<User> listUsers = ur.findAll();
+
+        UserExcelExporter excelExporter = new UserExcelExporter(listUsers);
+        excelExporter.export(response);
+
+    }
     @GetMapping("/edit")
     public String edit(@RequestParam("id") int id, Model model, HttpSession session) {
         session.setAttribute("idEditUser", id);
         User user = ur.findById(id).orElse(null);
         model.addAttribute("user", user);
-
+        model.addAttribute("roleList", rr.findAll());
         return "admin/user/edit";
     }
 
     @PostMapping("/edit")
-    public String edit(@ModelAttribute("user") User user, HttpSession session, Principal principal)
+    public String edit(@ModelAttribute("user") User user, HttpSession session, Principal principal, Model model)
             throws IllegalStateException, IOException {
-        user.setCreatedAt(new Date(System.currentTimeMillis()));
-        User current = ur.findById((int) session.getAttribute("idEditUser")).orElse(null);
+        int k = 0;
+        Pattern pattern = Pattern.compile("^[^{]{4,150}$");
+        Matcher m = pattern.matcher(user.getName());
 
-        if (current != null) {
-            // lay du lieu can update tu edit qua current, de tranh mat du lieu cu
-            current.setName(user.getName());
-            current.setEmail(user.getEmail());
-            current.setModifyBy(principal.getName());
-            current.setCreatedAt(new Date(System.currentTimeMillis()));
-            current.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));
-            if (!user.getFile().isEmpty()) {
-                final String UPLOAD_FOLDER = "D:/file/qlcv/user/";
-                String filename = user.getFile().getOriginalFilename();
-                File newFile = new File(UPLOAD_FOLDER + filename);
-                user.getFile().transferTo(newFile);
-                current.setAvatar(filename); // save to db
+        Pattern pattern1 = Pattern.compile("^[0-9a-zA-Z]{4,}$");
+        Matcher m1 = pattern1.matcher(user.getPassword());
+
+        Pattern pattern2 = Pattern.compile("^[a-zA-Z0-9_!#$%&'*+/=?`{|}~^.-]+@[a-zA-Z0-9.-]+$");
+        Matcher m2 = pattern2.matcher(user.getEmail());
+
+        User userCheck = ur.findByName(user.getName());
+
+        User emailCheck = ur.findByEmail(user.getEmail());
+
+        if (userCheck != null && userCheck.getId() != (int)session.getAttribute("idEditUser")) {
+            model.addAttribute("errName", "Duplicate username");
+            k = 1;
+        }
+
+        if (emailCheck != null && emailCheck.getId() != (int)session.getAttribute("idEditUser")) {
+            model.addAttribute("errEmail", "Duplicate email");
+            k = 1;
+        }
+
+        if (!m.find()) {
+            model.addAttribute("errName", "Enter length greater than 4 characters and lesser 150 characters");
+            k = 1;
+        }
+
+        if (!m1.find()) {
+            model.addAttribute("errPass", "Enter length greater than 4 characters and lesser 150 characters");
+            k = 1;
+        }
+
+        if (!m2.find()) {
+            model.addAttribute("errEmail", "Wrong format (EX: A@gmail.com)");
+            k = 1;
+        }
+
+        if (k == 1) {
+            model.addAttribute("name", user.getName());
+            model.addAttribute("email", user.getEmail());
+            model.addAttribute("pass", user.getPassword());
+            model.addAttribute("roleList", rr.findAll());
+            return "admin/user/add";
+        } else {
+            User current = ur.findById((int) session.getAttribute("idEditUser")).orElse(null);
+            if (current != null) {
+                // lay du lieu can update tu edit qua current, de tranh mat du lieu cu
+                current.setId((int) session.getAttribute("idEditUser"));
+                current.setName(user.getName());
+                current.setEmail(user.getEmail());
+                current.setModifyBy(principal.getName());
+                current.setCreatedAt(new Date(System.currentTimeMillis()));
+                current.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));
+                if (!user.getFile().isEmpty()) {
+                    final String UPLOAD_FOLDER = "D:/file/qlcv/user/";
+                    String filename = user.getFile().getOriginalFilename();
+                    File newFile = new File(UPLOAD_FOLDER + filename);
+                    user.getFile().transferTo(newFile);
+                    current.setAvatar(filename); // save to db
+                }
+                ur.save(current);
             }
-            ur.save(current);
         }
         return "redirect:/user/list";
     }
@@ -157,6 +287,7 @@ public class UserController {
         model.addAttribute("count", count);
         return "admin/user/list";
     }
+
 
     @GetMapping("/search")
     public String search(@RequestParam("searchName") String name, Model model,

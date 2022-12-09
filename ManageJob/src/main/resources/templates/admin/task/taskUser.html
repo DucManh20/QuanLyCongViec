@@ -22,7 +22,10 @@
 <div class="col offset-0 mt-4">
 
 </div>
-<div th:replace="/header.html :: main-menu"></div>
+<div th:replace="/headerU.html :: main-menu"></div>
+<!--    <div class="col offset-0 mt-4">-->
+<!--        <div th:replace="/header.html :: main-menu"></div>-->
+<!--    </div>-->
 <div style="margin-top: 100px" class="app-wrapper">
 
     <div class="app-content pt-3 p-md-3 p-lg-4">
@@ -37,10 +40,10 @@
                         <div class="row g-2 justify-content-start justify-content-md-end align-items-center">
                             <div class="col-auto">
                                 <form class="table-search-form row gx-1 align-items-center" method=""
-                                      th:action="@{/task/search}">
+                                      th:action="@{/task/searchTaskUser}">
                                     <div class="col-auto">
                                         <input type="text" id="search-orders" name="name"
-                                               class="form-control search-orders" placeholder="Search">
+                                               class="form-control search-orders" placeholder="Search by name">
                                     </div>
                                     <div class="col-auto">
                                         <button type="submit" class="btn app-btn-secondary">Search</button>
@@ -78,11 +81,15 @@
                 </div><!--//col-auto-->
             </div><!--//row-->
             <nav id="orders-table-tab" class="orders-table-tab app-nav-tabs nav shadow-sm flex-column flex-sm-row mb-4">
-                <a class="flex-sm-fill text-sm-center nav-link active"  th:href="@{/task/list}" role="tab" >All</a>
-                <a class="flex-sm-fill text-sm-center nav-link" th:href="@{/task/listByStatus?status1=Todo List}" role="tab" >Todo List</a>
-                <a class="flex-sm-fill text-sm-center nav-link" th:href="@{/task/listByStatus?status1=In Progress}" role="tab" aria-controls="orders-paid" aria-selected="true">In Progress</a>
-                <a class="flex-sm-fill text-sm-center nav-link" th:href="@{/task/listByStatus?status1=Review}" role="tab" aria-controls="orders-pending" aria-selected="true">Review</a>
-                <a class="flex-sm-fill text-sm-center nav-link" th:href="@{/task/listByStatus?status1=Done}" role="tab" aria-controls="orders-cancelled" aria-selected="true">Done</a>
+                <a class="flex-sm-fill text-sm-center nav-link active" id="orders-all-tab"  th:href="@{/task/myTask}" role="tab">All</a>
+                <a class="flex-sm-fill text-sm-center nav-link"  th:href="@{/task/listByStatusId?status1=Todo List}"
+                   role="tab" aria-controls="orders-paid" >Todo List</a>
+                <a class="flex-sm-fill text-sm-center nav-link" th:href="@{/task/listByStatusId?status1=In Progress}"
+                   role="tab" aria-controls="orders-paid" aria-selected="true">In Progress</a>
+                <a class="flex-sm-fill text-sm-center nav-link" th:href="@{/task/listByStatusId?status1=Review}"
+                   role="tab" aria-controls="orders-pending" aria-selected="true">Review</a>
+                <a class="flex-sm-fill text-sm-center nav-link" th:href="@{/task/listByStatusId?status1=Done}"
+                   role="tab" aria-controls="orders-cancelled" aria-selected="true">Done</a>
             </nav>
 
             <div class="tab-content" id="orders-table-tab-content">
@@ -107,7 +114,8 @@
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    <tr th:each=" task : ${listD}">
+
+                                    <tr th:each=" task : ${listD}" onclick="window.location= '#'" ;>
                                         <td class="cell" th:text="${task.id}"></td>
                                         <td class="cell" th:text="${task.name}"></td>
                                         <td class="cell" th:text="${task.estimateHourse}"></td>
@@ -116,7 +124,8 @@
                                         <td class="cell" th:text="${task.endDate}"></td>
                                         <td class="cell" th:text="${task.modifyBy}"></td>
                                         <td class="cell" th:text="${task.user.name}"></td>
-                                        <td class="cell" ><span class="badge bg-danger" th:text="${task.status.status1}"></span></td>
+                                        <td class="cell"><span class="badge bg-danger"
+                                                               th:text="${task.status.status1}"></span></td>
                                         <td class="cell"><a th:href="@{'/task/edit?id='+${task.id}}"><i
                                                 class="fas fa-edit    "></i>Edit</a> | <a
                                                 th:href="@{'/task/delete?id='+${task.id}}"><i
@@ -124,6 +133,7 @@
                                                 th:href="@{'/task/view?id='+${task.id}}"><i
                                                 class="fas fa-recycle    "></i>View</a></td>
                                     </tr>
+
                                     <tr>
                                         <td style="width: 300px" colspan="10">Tổng <span th:text="${count}"></span>
                                             bản

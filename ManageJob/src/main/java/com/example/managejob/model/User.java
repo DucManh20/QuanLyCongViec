@@ -1,14 +1,15 @@
 package com.example.managejob.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -30,8 +31,13 @@ public class User {
     @Column(nullable = false, unique = true, length = 150)
     private String email;
 
-    @Column(name = "role", length = 30)
-    private String role;
+//    @Column(name = "role", length = 30)
+//    private String role;
+
+//    @JsonManagedReference
+//    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
+//    private List<RoleUser> userRoles;
+
 
     @Column(name = "avatar", length = 150)
     private String avatar;
@@ -46,9 +52,20 @@ public class User {
     @Transient
     private MultipartFile file;
 
-    @OneToMany(mappedBy = "user")
+    @ManyToOne(fetch = FetchType.LAZY)
+
+    @JoinColumn(name = "role_id")
+    private RoleUser roleUser;
+
+    @OneToMany(mappedBy = "user",cascade =CascadeType.ALL)
+    @JsonManagedReference
     private Set<Task> tasks;
 
+    @OneToMany(mappedBy = "user",cascade =CascadeType.ALL)
+    @JsonManagedReference
+    private List<Comment> comments;
 
-
+    @OneToMany(mappedBy = "user",cascade =CascadeType.ALL)
+    @JsonManagedReference
+    private List<Document> documents ;
 }

@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div class="app-card-body px-4 w-100">
+  <div class="item border-bottom py-3">
+    <div class="row justify-content-between align-items-center">
+      <div class="col-auto">
+        <div class="item-label mb-2"><strong>ID</strong></div>
+        <div class="item-data" th:text="${task.id}"></div>
+      </div><!--//col-->
+    </div><!--//row-->
+  </div><!--//item-->
+  <div class="item border-bottom py-3">
+    <div class="row justify-content-between align-items-center">
+      <div class="col-auto">
+        <div class="item-label"><strong>Name</strong></div>
+        <div class="item-data" th:text="${task.name}"></div>
+      </div><!--//col-->
+    </div><!--//row-->
+  </div><!--//item-->
+  <div class="item border-bottom py-3">
+    <div class="row justify-content-between align-items-center">
+      <div class="col-auto">
+        <div class="item-label"><strong>Estimate Hourse</strong></div>
+        <div class="item-data" th:text="${task.estimateHourse}"></div>
+      </div><!--//col-->
+    </div><!--//row-->
+  </div><!--//item-->
+  <div class="item border-bottom py-3">
+    <div class="row justify-content-between align-items-center">
+      <div class="col-auto">
+        <div class="item-label"><strong>Spent Time</strong></div>
+        <div class="item-data" th:text="${task.spentTime}"></div>
+      </div><!--//col-->
+    </div><!--//row-->
+  </div><!--//item-->
+  <div class="item border-bottom py-3">
+    <div class="row justify-content-between align-items-center">
+      <div class="col-auto">
+        <div class="item-label"><strong>Start Date</strong></div>
+        <div class="item-data" th:text="${task.startDate}"></div>
+      </div><!--//col-->
+    </div><!--//row-->
+  </div><!--//item-->
+  <div class="item border-bottom py-3">
+    <div class="row justify-content-between align-items-center">
+      <div class="col-auto">
+        <div class="item-label"><strong>End Date</strong></div>
+        <div class="item-data" th:text="${task.endDate}"></div>
+      </div><!--//col-->
+    </div><!--//row-->
+  </div><!--//item-->
+  <div class="item border-bottom py-3">
+    <div class="row justify-content-between align-items-center">
+      <div class="col-auto">
+        <div class="item-label"><strong>Create By</strong></div>
+        <div class="item-data" th:text="${task.modifyBy}"></div>
+      </div><!--//col-->
+    </div><!--//row-->
+  </div><!--//item-->
+  <div class="item border-bottom py-3">
+    <div class="row justify-content-between align-items-center">
+      <div class="col-auto">
+        <div class="item-label"><strong>Satus</strong></div>
+        <div class="item-data" th:text="${task.status.status1}"></div>
+      </div><!--//col-->
+      <div class="col text-end">
+        <a class="btn-sm app-btn-secondary" href="#">Change</a>
+      </div><!--//col-->
+    </div><!--//row-->
+  </div><!--//item-->
+</div><!--//item-->
+</body>
+</html>

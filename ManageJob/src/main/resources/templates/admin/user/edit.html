@@ -49,9 +49,17 @@
                         <input  multiple type="file" class="form-control"  value="" name = "file">
                         <span style="color: red" th:text="${errAvatar}"></span>
                     </div>
+                    <div class="form-group">
+                        <label>Role</label> <br> <select
+                            name="roleUser.id">
+                        <option class="form-control" th:each="s : ${roleList}"
+                                th:value="${s.id}" th:text="${s.role}"></option>
+                    </select>
+                    </div>
+
                     <button type="submit" class="btn app-btn-primary">Save Changes</button>
 
-                    <a class="btn app-btn-primary">List User</a>
+                    <a class="btn app-btn-primary" th:href="@{/user/list}">List User</a>
 
                 </form>
             </div><!--//app-card-body-->

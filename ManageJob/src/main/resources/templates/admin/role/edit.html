@@ -23,29 +23,28 @@
 <div style="margin-top: 100px" class="app-wrapper">
     <div class="app-content pt-3 p-md-3 p-lg-4">
         <div class="container-xl">
-            <h1 class="app-page-title">Add new status</h1>
-    <div class="row g-4 settings-section">
-        <div class="app-card app-card-settings shadow-sm p-4">
-            <div class="app-card-body">
-                <form class="settings-form" th:action="@{/status/add}"
-                      method="post">
-                    <div class="mb-3">
-                        <label for="setting-input-1" class="form-label">Status</label>
-                        <input type="text" class="form-control" id="setting-input-1" th:value="${status1}" name="status1" placeholder="Enter status">
-                        <span style="color: red" th:text="${errStatus}"></span>
-                    </div>
+            <h1 class="app-page-title">Edit user</h1>
+            <div class="row g-4 settings-section">
+                <div class="app-card app-card-settings shadow-sm p-4">
+                    <div class="app-card-body">
+                        <form class="settings-form" th:action="@{/role/edit}"
+                              method="post">
+                            <div class="mb-3">
+                                <label for="setting-input-1" class="form-label">Role</label>
+                                <input type="text" class="form-control" id="setting-input-1" th:value="${roleUser.role}" name="role" placeholder="Enter role">
+                                <span style="color: red" th:text="${errRole}"></span>
+                            </div>
+                            <button type="submit" class="btn app-btn-primary">Save Changes</button>
+                            <a class="btn app-btn-primary" th:href="@{/role/list}">List Role</a>
 
-                    <button type="submit" class="btn app-btn-primary">Save Changes</button>
-                    <a class="btn app-btn-primary" th:href="@{/status/list}">List Status</a>
+                        </form>
+                    </div><!--//app-card-body-->
 
-                </form>
-            </div><!--//app-card-body-->
+                </div><!--//app-card-->
+            </div>
+        </div><!--//row-->
 
-        </div><!--//app-card-->
-    </div>
-</div><!--//row-->
-
-</div><!--//app-wrapper-->
+    </div><!--//app-wrapper-->
 </div>
 
 <!-- Optional JavaScript -->

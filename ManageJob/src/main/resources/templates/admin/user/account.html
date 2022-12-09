@@ -42,82 +42,54 @@
 
                                 </div><!--//col-->
                                 <div class="col-auto">
-                                    <h4 class="app-card-title" th:text="${task.name}">Task</h4>
+                                    <h4 class="app-card-title" th:text="${user.name}">Profile</h4>
                                 </div><!--//col-->
                             </div><!--//row-->
                         </div><!--//app-card-header-->
                         <div class="app-card-body px-4 w-100">
-<!--                            <div class="item border-bottom py-3">-->
-<!--                                <div class="row justify-content-between align-items-center">-->
-<!--                                    <div class="col-auto">-->
-<!--                                        <div class="item-label mb-2"><strong>ID</strong></div>-->
-<!--                                        <div class="item-data" th:text="${task.id}"></div>-->
-<!--                                    </div>&lt;!&ndash;//col&ndash;&gt;-->
-<!--                                </div>&lt;!&ndash;//row&ndash;&gt;-->
-<!--                            </div>&lt;!&ndash;//item&ndash;&gt;-->
-
                             <div class="item border-bottom py-3">
                                 <div class="row justify-content-between align-items-center">
-                                    <div class="col-auto" style="display: flex !important;">
-                                        <div class="item-label" style="margin-right: 20px !important;"><strong>Estimate Hourse</strong></div>
-                                        <div class="item-data" th:text="${task.estimateHourse}"></div>
+                                    <div class="col-auto">
+                                        <div class="item-label mb-2"><strong>Photo</strong></div>
+                                        <div class="item-data"><img
+                                                style="width: 300px!important;height: 200px!important;"
+                                                class="profile-image"
+                                                th:src="@{'/user/download?filename=' + ${user.avatar}}" alt=""></div>
                                     </div><!--//col-->
                                 </div><!--//row-->
                             </div><!--//item-->
                             <div class="item border-bottom py-3">
                                 <div class="row justify-content-between align-items-center">
                                     <div class="col-auto" style="display: flex !important;">
-                                        <div class="item-label" style="margin-right: 20px !important;"><strong>Spent Time</strong></div>
-                                        <div class="item-data" th:text="${task.spentTime}"></div>
+                                        <div class="item-label" style="margin-right: 20px"><strong>Email</strong></div>
+                                        <div class="item-data" th:text="${user.email}"></div>
                                     </div><!--//col-->
                                 </div><!--//row-->
                             </div><!--//item-->
                             <div class="item border-bottom py-3">
                                 <div class="row justify-content-between align-items-center">
                                     <div class="col-auto" style="display: flex !important;">
-                                        <div class="item-label" style="margin-right: 20px !important;"><strong>Start Date</strong></div>
-                                        <div class="item-data" th:text="${task.startDate}"></div>
+                                        <div class="item-label" style="margin-right: 20px"><strong>Role</strong></div>
+                                        <div class="item-data" th:text="${user.roleUser.getRole()}">
+                                        </div>
                                     </div><!--//col-->
                                 </div><!--//row-->
                             </div><!--//item-->
                             <div class="item border-bottom py-3">
                                 <div class="row justify-content-between align-items-center">
                                     <div class="col-auto" style="display: flex !important;">
-                                        <div class="item-label" style="margin-right: 20px !important;"><strong>End Date</strong></div>
-                                        <div class="item-data" th:text="${task.endDate}"></div>
-                                    </div><!--//col-->
-                                </div><!--//row-->
-                            </div><!--//item-->
-                            <div class="item border-bottom py-3">
-                                <div class="row justify-content-between align-items-center">
-                                    <div class="col-auto" style="display: flex !important;">
-                                        <div class="item-label" style="margin-right: 20px !important;"><strong>Create By</strong></div>
-                                        <div class="item-data" th:text="${task.modifyBy}"></div>
-                                    </div><!--//col-->
-                                </div><!--//row-->
-                            </div><!--//item-->
-                            <div class="item border-bottom py-3">
-                                <div class="row justify-content-between align-items-center">
-                                    <div class="col-auto" style="display: flex !important;">
-                                        <div class="item-label" style="margin-right: 20px !important;"><strong>Satus</strong></div>
-                                        <div class="item-data"><span class="badge bg-danger" th:text="${task.status.status1}"></span></div>
+                                        <div class="item-label" style="margin-right: 20px"><strong>Password</strong></div>
+                                        <div class="item-data" > password
+                                        </div>
                                     </div><!--//col-->
                                     <div class="col text-end">
                                         <a class="btn-sm app-btn-secondary" href="#">Change</a>
                                     </div><!--//col-->
                                 </div><!--//row-->
                             </div><!--//item-->
-                            <div class="item border-bottom py-3">
-                                <div class="row justify-content-between align-items-center">
-                                    <div class="col-auto">
-                                        <div class="item-label mb-2"><strong>Description</strong></div>
-                                        <div class="item-data" th:text="${task.id}"></div>
-                                    </div><!--//col-->
-                                </div><!--//row-->
-                            </div><!--//item-->
                         </div><!--//app-card-body-->
                         <div class="app-card-footer p-4 mt-auto">
-                            <a class="btn app-btn-secondary" th:href="@{/task/myTask}">My Task</a>
+                            <a class="btn app-btn-secondary" href="#">Edit Profile</a>
                         </div><!--//app-card-footer-->
 
                     </div><!--//app-card-->
@@ -137,66 +109,82 @@
 
                                 </div><!--//col-->
                                 <div class="col-auto">
-                                    <h4 class="app-card-title">Comment</h4>
+                                    <h4 class="app-card-title">Task</h4>
                                 </div><!--//col-->
                             </div><!--//row-->
                         </div><!--//app-card-header-->
                         <div class="app-card-body px-4 w-100">
-                            <div class="item border-bottom py-3" th:each=" c : ${listC}">
+                            <div class="item border-bottom py-3">
                                 <div class="row justify-content-between align-items-center">
-                                    <div class="col-auto" style="display: flex !important;">
-                                        <div class="item-data" th:text="${c.content}"></div>
-                                        <div style="color: red !important;font-size: 10px;font-weight: 500 !important;"  class="item-label" th:text="${c.user.name}"></div>
-
-<!--                                        <div style="color: red !important;font-size: 10px"  class="item-label" th:text="${c.user.createdAt}"></div>-->
+                                    <div class="col-auto" style="display: flex">
+                                        <div class="item-label" style="margin-right:50px; width: 80px"><strong>Todo list </strong></div>
+                                        <div class="item-data"><span class="badge bg-success"  th:text="${count}"></span></div>
                                     </div><!--//col-->
                                     <div class="col text-end">
-                                        <a class="btn-sm app-btn-secondary" th:href="@{'/task/deleteFile?idComment='+${c.id}}">Delete</a>
+                                        <a class="btn-sm app-btn-secondary"  th:href="@{/task/listByStatusId?status1=Todo List}">View</a>
+                                    </div><!--//col-->
+                                </div><!--//row-->
+                            </div><!--//item-->
+                            <div class="item border-bottom py-3">
+                                <div class="row justify-content-between align-items-center">
+                                    <div class="col-auto" style="display: flex">
+                                        <div class="item-label" style="margin-right: 50px; width: 80px"><strong>In Progress </strong></div>
+                                        <div class="item-data"><span class="badge bg-success"   th:text="${countI}"></span></div>
+                                    </div><!--//col-->
+                                    <div class="col text-end">
+                                        <a class="btn-sm app-btn-secondary"  th:href="@{/task/listByStatusId?status1=In Progress}">View</a>
+                                    </div><!--//col-->
+                                </div><!--//row-->
+                            </div><!--//item-->
+                            <div class="item border-bottom py-3">
+                                <div class="row justify-content-between align-items-center">
+                                    <div class="col-auto" style="display: flex">
+                                        <div class="item-label" style="margin-right: 50px; width: 80px"><strong>Review </strong></div>
+                                        <div class="item-data" ><span class="badge bg-success"   th:text="${countR}"></span></div>
+                                    </div><!--//col-->
+                                    <div class="col text-end">
+                                        <a class="btn-sm app-btn-secondary"  th:href="@{/task/listByStatusId?status1=Review}">View</a>
+                                    </div><!--//col-->
+                                </div><!--//row-->
+                            </div><!--//item-->
+                            <div class="item border-bottom py-3">
+                                <div class="row justify-content-between align-items-center">
+                                    <div class="col-auto" style="display: flex">
+                                        <div class="item-label" style="margin-right: 50px; width: 80px"><strong>Done </strong></div>
+                                        <div class="item-data" ><span class="badge bg-success"   th:text="${countD}"></span></div>
+                                    </div><!--//col-->
+                                    <div class="col text-end">
+                                        <a class="btn-sm app-btn-secondary"  th:href="@{/task/listByStatusId?status1=Done}">View</a>
+                                    </div><!--//col-->
+                                </div><!--//row-->
+                            </div><!--//item-->
+                            <div class="item border-bottom py-3">
+                                <div class="row justify-content-between align-items-center">
+                                    <div class="col-auto" style="display: flex">
+                                        <div class="item-label" style="margin-right: 50px; width: 80px" ><strong>Expired </strong></div>
+                                        <div class="item-data" >  <span  class="badge bg-danger">01</span></div>
+                                    </div><!--//col-->
+                                    <div class="col text-end">
+                                        <a class="btn-sm app-btn-secondary"  th:href="@{/task/myTask}">View</a>
+                                    </div><!--//col-->
+                                </div><!--//row-->
+                            </div><!--//item-->
+                            <div class="item border-bottom py-3">
+                                <div class="row justify-content-between align-items-center">
+                                    <div class="col-auto" style="display: flex">
+                                        <div class="item-label" style="margin-right: 50px; width: 80px"><strong>Total </strong></div>
+                                        <div class="item-data" ><span class="badge bg-warning" th:text="${countAll}"></span></div>
+                                    </div><!--//col-->
+                                    <div class="col text-end">
+                                        <a class="btn-sm app-btn-secondary"  th:href="@{/task/myTask}">View</a>
                                     </div><!--//col-->
                                 </div><!--//row-->
                             </div><!--//item-->
 
-                            <div class="item border-bottom py-3" th:each=" d : ${listDocument}">
-                                <div class="row justify-content-between align-items-center">
-                                    <div class="col-auto">
-                                        <a th:href="@{'/task/download?id=' + ${d.id}}">
-                                            <img style="width: 40px" th:src="@{/images/OIP.jpg}" >
 
-                                            <div class="item-data" th:text="${d.name}"></div>
-
-                                        </a>
-                                        <div class="item-data" >
-                                            ([[${#numbers.formatInteger(d.size, 4, 'COMMA')}]] bytes)
-                                        </div>
-                                        <!--                                        <div style="color: red !important;font-size: 10px"  class="item-label" th:text="${c.user.createdAt}"></div>-->
-                                    </div><!--//col-->
-                                    <div class="col text-end">
-                                        <a class="btn-sm app-btn-secondary" th:href="@{'/task/deleteFile?idDocument='+${d.id}}">Delete</a>
-                                    </div><!--//col-->
-                                </div><!--//row-->
-                            </div><!--//item-->
                         </div><!--//app-card-body-->
                         <div class="app-card-footer p-4 mt-auto">
-                            <form class="table-search-form row gx-1 align-items-center" method="post" th:action="@{/task/view}">
-                                <div class="col-auto">
-                                    <input type="text"  name="content"
-                                           class="form-control search-orders" placeholder="Comment" required="true">
-                                </div>
-                                <div class="col-auto">
-                                    <button type="submit" class="btn app-btn-secondary">Send</button>
-                                </div>
-                            </form>
-
-                            <form class="table-search-form row gx-1 align-items-center" method="post" th:action="@{/task/view}" enctype="multipart/form-data">
-                                <div class="col-auto">
-                                    <input type="file"  name="document"
-                                           class="form-control search-orders" placeholder="Comment" required="true">
-                                </div>
-                                <div class="col-auto">
-                                    <button type="submit" class="btn app-btn-secondary">Upload</button>
-                                </div>
-                            </form>
-<!--                            <a class="btn app-btn-secondary" href="#">Manage Preferences</a>-->
+                            <a class="btn app-btn-secondary" href="#">Manage Preferences</a>
                         </div><!--//app-card-footer-->
 
                     </div><!--//app-card-->

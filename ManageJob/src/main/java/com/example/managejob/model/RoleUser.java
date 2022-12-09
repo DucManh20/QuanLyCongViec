@@ -3,11 +3,12 @@ package com.example.managejob.model;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.util.Set;
 
 @Entity
 @Data
-@Table(name = "role")
-public class Role {
+@Table(name = "role_user")
+public class RoleUser {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -16,4 +17,8 @@ public class Role {
 
     @Column(name = "role", nullable = false, length = 30)
     private String role;
+
+    @OneToMany(mappedBy = "roleUser")
+    private Set<User> user;
+
 }

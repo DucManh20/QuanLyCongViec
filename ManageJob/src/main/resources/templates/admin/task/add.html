@@ -1,8 +1,7 @@
 <!doctype html>
-<html lang="en">
-
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Add user</title>
+    <title>List</title>
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport"
@@ -10,95 +9,98 @@
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet"
+          href="https://use.fontawesome.com/releases/v5.1.1/css/all.css"
+          integrity="sha384-O8whS3fhG2OnA5Kas0Y9l3cfpmYjapjI0E4theH4iuMD+pLhbf6JI0jIMfYcK3yZ"
+          crossorigin="anonymous">
+    <link rel="stylesheet"
           href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
           integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
           crossorigin="anonymous">
+    <link th:href="@{/css/portal.css}" rel="stylesheet"/>
 </head>
 <body>
-<main class="container" style="margin-top: 100px">
-    <section class="row">
-        <div class="col-6 offset-3">
-            <form th:action="@{/task/add}"
-                  method="post">
-                <div class="card">
-                    <div class="card-header">
-                        <b style="text-align: center;">
-                            <h2>Add New Task</h2></b>
-                    </div>
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col">
-                                <div class="form-group">
-                                    <label>Name</label> <input type="text"
-                                                               class="form-control" name="name"
-                                                               placeholder="Enter Name">
-                                </div>
-
-                                <div class="form-group">
-                                    <label>Enstimate Hourse</label> <input type="text"
-                                                                           class="form-control" name="estimate_hourse"
-                                                                           placeholder="Enter Email">
-                                </div>
-                                <div class="form-group">
-                                    <label>Spent Time</label> <input type="text"
-                                                                     class="form-control" name="spent_time"
-                                                                     placeholder="Enter Email">
-                                </div>
-                                <div class="form-group">
-                                    <label>Start Date</label> <input type="date"
-                                                                     class="form-control" name="start_date"
-                                                                     placeholder="Enter Email">
-                                </div>
-                                <div class="form-group">
-                                    <label>End Date</label> <input type="date"
-                                                                   class="form-control" name="end_date"
-                                                                   placeholder="Enter Email">
-                                </div>
-
-                                <div class="form-group">
-                                    <label>User</label> <br> <select
-                                        name="user.id">
-                                    <option class="form-control" th:each="d : ${userList}"
-                                            th:value="${d.id}" th:text="${d.name}"></option>
-                                </select>
-                                </div>
-
-                                <div class="form-group">
-                                    <label>Status</label> <br> <select
-                                        name="status.id">
-                                    <option class="form-control" th:each="s : ${statusList}"
-                                            th:value="${s.id}" th:text="${s.status1}"></option>
-                                </select>
-                                </div>
-
-                                <div class="card-footer text-muted">
-                                    <button type="submit" class="btn btn-primary">Save</button>
-                                    <button type="reset" class="btn btn-primary">Reset</button>
-                                    <a class="btn btn-primary" th:href="@{/task/list}">List
-                                        Task</a>
-
-                                </div>
+<div th:replace="/header.html :: main-menu"></div>
+<div style="margin-top: 100px" class="app-wrapper">
+    <div class="app-content pt-3 p-md-3 p-lg-4">
+        <div class="container-xl">
+            <h1 class="app-page-title">Add new task</h1>
+            <div class="row g-4 settings-section">
+                <div class="app-card app-card-settings shadow-sm p-4">
+                    <div class="app-card-body">
+                        <form class="settings-form" th:action="@{/task/add}"
+                              method="post">
+                            <div class="mb-3">
+                                <label for="setting-input-1" class="form-label">Name
+                                    </svg></span></label>
+                                <input type="text" class="form-control" id="setting-input-1" th:value="${name}"
+                                       name="name" placeholder="Enter name">
+                                <span style="color: red" th:text="${errName}"></span>
                             </div>
-                        </div>
-                    </div>
-                </div>
-            </form>
-        </div>
-    </section>
-</main>
+                            <div class="mb-3">
+                                <label for="setting-input-2" class="form-label">Enstimate Hourse</label>
+                                <input type="number" class="form-control" id="setting-input-2" th:value="${estimateHourse}"
+                                       name="estimateHourse" placeholder="Enter estimate hourse">
+                                <span style="color: red" th:text="${errEstimateHourse}"></span>
+                            </div>
+                            <div class="mb-3">
+                                <label for="setting-input-3" class="form-label">Spent Time</label>
+                                <input type="text" class="form-control" id="setting-input-3" th:value="${spentTime}"
+                                       name="spentTime" placeholder="Enter spent Time">
+                                <span style="color: red" th:text="${errSpentTime}"></span>
+                            </div>
+                            <div class="mb-3">
+                                <label for="setting-input-4" class="form-label">Start Date</label>
+                                <input type="date" class="form-control" id="setting-input-4" th:value="${startDate}"
+                                       name="startDate" placeholder="Enter start Date">
+                                <span style="color: red" th:text="${errStartDate}"></span>
+                            </div>
+                            <div class="mb-3">
+                                <label for="setting-input-5" class="form-label">End Date</label>
+                                <input type="date" class="form-control" id="setting-input-5" th:value="${endDate}"
+                                       name="endDate" placeholder="Enter end date">
+                                <span style="color: red" th:text="${errEndDate}"></span>
+                            </div>
+                            <div class="mb-3">
+                                <label>User</label> <br> <select
+                                    name="user.id">
+                                <option class="form-control" th:each="d : ${userList}"
+                                        th:value="${d.id}" th:text="${d.name}"></option>
+                            </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Status</label> <br> <select
+                                    name="status.id">
+                                <option class="form-control" th:each="s : ${statusList}"
+                                        th:value="${s.id}" th:text="${s.status1}"></option>
+                            </select>
+                            </div>
+
+                            <button type="submit" class="btn app-btn-primary">Save Changes</button>
+
+                            <a class="btn app-btn-primary" th:href="@{/task/list}">List Task</a>
+
+                        </form>
+                    </div><!--//app-card-body-->
+
+                </div><!--//app-card-->
+            </div>
+        </div><!--//row-->
+
+    </div><!--//app-wrapper-->
+</div>
+
 <!-- Optional JavaScript -->
 <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
-        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
-        crossorigin="anonymous"></script>
-<script
-        src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
-        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
-        crossorigin="anonymous"></script>
-<script
-        src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
-        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
-        crossorigin="anonymous"></script>
-</body>
+<!-- Javascript -->
+<script th:src="@{/plugins/popper.min.js}"></script>
+<script th:src="@{/plugins/bootstrap/js/bootstrap.min.js}"></script>
 
+<!-- Charts JS -->
+<script th:src="@{/plugins/chart.js/chart.min.js}"></script>
+<script th:src="@{assets/js/index-charts.js}"></script>
+
+<!-- Page Specific JS -->
+<script th:src="@{/js/app.js}"></script>
+</body>
 </html>
