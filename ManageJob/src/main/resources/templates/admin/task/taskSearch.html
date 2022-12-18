@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>List</title>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet"
+          href="https://use.fontawesome.com/releases/v5.1.1/css/all.css"
+          integrity="sha384-O8whS3fhG2OnA5Kas0Y9l3cfpmYjapjI0E4theH4iuMD+pLhbf6JI0jIMfYcK3yZ"
+          crossorigin="anonymous">
+    <link rel="stylesheet"
+          href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+          crossorigin="anonymous">
+    <link th:href="@{/css/portal.css}" rel="stylesheet"/>
+    <script th:src="@{//code.jquery.com/jquery-3.3.1.min.js}"></script>
+    <script th:src="@{/js/tab.js}"></script>
+    <script th:src="@{/js/navLink.js}"></script>
+
+</head>
+<body>
+<div th:replace="/headerU.html :: main-menu"></div>
+<!--    <div class="col offset-0 mt-4">-->
+<!--        <div th:replace="/header.html :: main-menu"></div>-->
+<!--    </div>-->
+<div style="margin-top: 100px" class="app-wrapper">
+    <div class="app-content pt-3 p-md-3 p-lg-4">
+        <div class="container-xl">
+            <div class="row g-3 mb-4 align-items-center justify-content-between">
+                <div class="col-auto">
+                    <h1 class="app-page-title mb-0">Tasks</h1>
+                </div>
+                <div class="col-auto">
+                    <div class="page-utilities">
+                        <div class="row g-2 justify-content-start justify-content-md-end align-items-center">
+                            <div class="col-auto">
+                                <form style="width: 700px !important;" class="table-search-form row gx-1 align-items-center" method=""
+                                      th:action="@{/task/searchTaskUser}">
+
+                                    <div class="col-auto">
+                                        <input type="date" id="search-orders4" name="startDate"
+                                               th:value="${startDate}" class="form-control search-orders" placeholder="Start Date">
+                                    </div>
+
+                                    <div class="col-auto">
+                                        <input type="date" id="search-orders3" name="endDate"
+                                               class="form-control search-orders" placeholder="End Date">
+                                    </div>
+                                    <div class="col-auto">
+                                        <input type="text" id="search-orders2" name="group"
+                                               th:value="${group}" class="form-control search-orders" placeholder="Search by group">
+                                    </div>
+
+                                    <div class="col-auto">
+                                        <input  type="text" id="search-orders"
+                                               name="name"
+                                              th:value="${name}" class="form-control search-orders" placeholder="Search by name">
+                                    </div>
+                                    <div class="col-auto">
+                                        <button style="margin-left: 8px" type="submit" class="btn app-btn-secondary">Search</button>
+                                    </div>
+                                </form>
+
+                            </div><!--//col-->
+                            <div class="col-auto">
+                                <a style="margin-top: 32px; " class="btn app-btn-secondary" th:href="@{/task/myTask}">
+                                   All Task
+                                </a>
+                            </div>
+                        </div><!--//row-->
+                    </div><!--//table-utilities-->
+                </div><!--//col-auto-->
+            </div><!--//row-->
+
+            <nav id="orders-table-tab" class="orders-table-tab app-nav-tabs nav shadow-sm flex-column flex-sm-row mb-4">
+                <a class="flex-sm-fill text-sm-center nav-link custom-nav-link-1 active" id="orders-all-tab"
+                   data-bs-toggle="tab" href="#orders-all" role="tab" aria-controls="orders-all" aria-selected="true"></a>
+            </nav>
+            <div class="tab-content" id="orders-table-tab-content">
+                <div class="tab-pane fade show active" id="orders-all" role="tabpanel" aria-labelledby="tab">
+                    <div class="app-card app-card-orders-table shadow-sm mb-5">
+                        <div class="app-card-body">
+                            <div class="table-responsive">
+                                <table class="table app-table-hover mb-0 text-left">
+                                    <thead>
+                                    <tr>
+                                        <th class="cell">ID</th>
+                                        <th class="cell">Name</th>
+                                        <th class="cell">Group</th>
+                                        <th class="cell">Description</th>
+                                        <th class="cell">Start Date</th>
+                                        <th class="cell">End Date</th>
+                                        <th class="cell">Created By</th>
+                                        <th class="cell">Assign</th>
+                                        <th class="cell">Satus</th>
+                                        <th class="cell">Actions</th>
+                                        <th></th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr th:each=" task : ${listD}">
+                                        <td class="cell" th:text="${task.id}"></td>
+                                        <td class="cell" th:text="${task.name}"></td>
+                                        <td class="cell" th:text="${task.group.name}"></td>
+                                        <td class="cell" th:text="${task.description}"></td>
+                                        <td class="cell" th:text="${#dates.format(task.startDate, 'dd-MM-yyyy')}">Start Date</td>
+                                        <td class="cell" th:text="${#dates.format(task.endDate, 'dd-MM-yyyy')}">End Date</td>
+                                        <td class="cell" th:text="${task.modifyBy}"></td>
+                                        <td class="cell" th:text="${task.user.name}"></td>
+                                        <td class="cell"><span class="badge bg-success"
+                                                               th:text="${task.status.status1}"></span></td>
+                                        <td class="cell">
+                                            <a class="btn-sm app-btn-secondary"
+                                               th:href="@{'/task/view?id='+${task.id}}">View</a></td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div><!--//table-responsive-->
+
+                        </div><!--//app-card-body-->
+                    </div><!--//app-card-->
+                    <nav class="app-pagination" style="display: flex; justify-content: space-between">
+                        <p style="width: 300px; font-weight: bold" colspan="10">Tổng <span th:text="${count}"></span>
+                            bản
+                            ghi
+                        <ul class="pagination justify-content-right">
+                            <li class="page-item disabled">
+                                <a class="page-link" th:href="@{'/task/myTask?page='+${page+(-1)}}">Previous</a>
+                            </li>
+                        <li class="page-item active disabled">
+                            <a class="page-link" >1</a></li>
+                        <li class="page-item disabled">
+                            <a class="page-link" >2</a></li>
+                            <li class="page-item disabled">
+                                <a class="page-link" th:href="@{'/task/myTask?page='+${page+1}}">Next</a>
+                            </li>
+                        </ul>
+                    </nav><!--//app-pagination-->
+                </div><!--//tab-pane-->
+            </div><!--//tab-content-->
+
+        </div><!--//app-card-body-->
+    </div><!--//app-card-->
+</div><!--//tab-pane-->
+</div><!--//container-fluid-->
+</div><!--//app-content-->
+</div><!--//app-wrapper-->
+</div>
+<!-- Optional JavaScript -->
+<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+<!-- Javascript -->
+<script th:src="@{/plugins/popper.min.js}"></script>
+<script th:src="@{/plugins/bootstrap/js/bootstrap.min.js}"></script>
+
+<!-- Charts JS -->
+<script th:src="@{/plugins/chart.js/chart.min.js}"></script>
+<!--<script th:src="@{/js/index-charts.js}"></script>-->
+
+<!-- Page Specific JS -->
+<script th:src="@{/js/app.js}"></script>
+</body>
+</html>

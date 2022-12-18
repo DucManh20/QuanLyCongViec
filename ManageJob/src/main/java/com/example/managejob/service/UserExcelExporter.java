@@ -1,5 +1,6 @@
-package com.example.managejob.model;
+package com.example.managejob.service;
 
+import com.example.managejob.model.User;
 import lombok.Data;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;

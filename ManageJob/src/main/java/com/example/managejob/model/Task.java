@@ -5,9 +5,10 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
-import javax.print.Doc;
+import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -23,17 +24,22 @@ public class Task {
     @Column(name = "name", nullable = false, length = 150)
     private String name;
 
+    @Column(name = "description", length = 512)
+    private String description;
+
     @Column(name = "estimate_hourse", length = 100)
     private String estimateHourse;
 
     @Column(name = "spent_time", length = 100)
     private String spentTime;
 
-    @Column(name = "start_date", length = 100)
-    private String startDate;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @Column(name = "start_date")
+    private Date startDate;
 
-    @Column(name = "end_date", length = 100)
-    private String endDate;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @Column(name = "end_date")
+    private Date endDate;
 
     @Column(name = "modifi_by", length = 150)
     private String modifyBy;
@@ -55,8 +61,11 @@ public class Task {
     @OneToMany(mappedBy = "task",cascade =CascadeType.ALL)
     @JsonManagedReference
     private List<Document> documents;
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "job_id")
-//    private Job job;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "group_id", referencedColumnName = "id")
+    @JsonBackReference
+    private GroupUser group;
+
 }
 

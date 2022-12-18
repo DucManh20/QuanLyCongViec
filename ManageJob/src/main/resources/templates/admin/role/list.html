@@ -101,10 +101,10 @@
 
 
                                         </tr>
-                                        <tr>
-                                            <td colspan="10">Tổng <span th:text="${count}"></span> bản
-                                                ghi trong <span th:text="${totalPage}"> </span> trang </td>
-                                        </tr>
+<!--                                        <tr>-->
+<!--                                            <td colspan="10">Tổng <span th:text="${count}"></span> bản-->
+<!--                                                ghi trong <span th:text="${totalPage}"> </span> trang </td>-->
+<!--                                        </tr>-->
                                         </tbody>
 
                                     </table>
@@ -112,15 +112,18 @@
 
                             </div><!--//app-card-body-->
                         </div><!--//app-card-->
-                        <nav class="app-pagination">
-                            <ul class="pagination justify-content-center">
-                                <li class="page-item">
+                        <nav class="app-pagination" style="display: flex; justify-content: space-between">
+                            <p  style="width: 300px; font-weight: bold" colspan="10">Tổng <span th:text="${count}"></span> bản
+                                ghi trong <span th:text="${totalPage}"> </span> trang </p>
+                            <ul class="pagination justify-content-right">
+                                <li th:class="${ page <= 0 ? 'page-item disabled' : 'page-item '}">
                                     <a class="page-link" th:href="@{'/role/list?page='+${page+(-1)}}" >Previous</a>
                                 </li>
-                                <li class="page-item active"><a class="page-link" th:href="@{/role/list?page=0}">1</a></li>
-                                <li class="page-item"><a class="page-link" th:href="@{/role/list?page=1}">2</a></li>
-                                <li class="page-item"><a class="page-link" th:href="@{/role/list?page=2}">3</a></li>
-                                <li class="page-item">
+                                <th:block th:each="i: ${#numbers.sequence(1, totalPage)}">
+                                    <li th:class="${page != i - 1 ? 'page-item' : 'page-item active'} ">
+                                        <a class="page-link" th:href="@{'/role/list?page='+${i - 1}}">[[${i}]]</a></li>
+                                </th:block>
+                                <li th:class="${ page == (totalPage - 1) ? 'page-item disabled' : 'page-item '}">
                                     <a class="page-link" th:href="@{'/role/list?page='+${page+1}}">Next</a>
                                 </li>
                             </ul>

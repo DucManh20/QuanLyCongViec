@@ -1,9 +1,8 @@
 package com.example.managejob.controller;
 
-import com.example.managejob.model.Status;
 import com.example.managejob.model.Task;
 import com.example.managejob.model.User;
-import com.example.managejob.model.UserExcelExporter;
+import com.example.managejob.service.UserExcelExporter;
 import com.example.managejob.repository.RoleRepository;
 import com.example.managejob.repository.StatusRepository;
 import com.example.managejob.repository.TaskRepository;
@@ -78,7 +77,6 @@ public class UserController {
 
         List<Task> listAll = tr.findListUserById(id);
         int countAll = listAll.size();
-
 
         model.addAttribute("count", count);
         model.addAttribute("countI", countI);

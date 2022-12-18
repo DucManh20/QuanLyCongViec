@@ -1,5 +1,6 @@
 package com.example.managejob.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -68,4 +69,8 @@ public class User {
     @OneToMany(mappedBy = "user",cascade =CascadeType.ALL)
     @JsonManagedReference
     private List<Document> documents ;
+
+    @ManyToMany(mappedBy = "users")
+    @JsonBackReference
+    private List<GroupUser> groups;
 }

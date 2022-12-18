@@ -33,7 +33,7 @@
 
                 <div class="row g-3 mb-4 align-items-center justify-content-between">
                     <div class="col-auto">
-                        <h1 class="app-page-title mb-0">Status</h1>
+                        <h1 class="app-page-title mb-0">My Group</h1>
                     </div>
                     <div class="col-auto">
                         <div class="page-utilities">
@@ -60,7 +60,7 @@
                                     </select>
                                 </div>
                                 <div class="col-auto">
-                                    <a th:href="@{/status/add}" class="btn app-btn-secondary">Add new status</a>
+                                    <a th:href="@{/group/add}" class="btn app-btn-secondary">Add new group</a>
                                 </div>
                                 <div class="col-auto">
                                     <a class="btn app-btn-secondary" href="#">
@@ -86,20 +86,26 @@
                                         <thead>
                                         <tr>
                                             <th class="cell">ID</th>
-                                            <th class="cell">Status</th>
+                                            <th class="cell">Name</th>
+                                            <th class="cell">Description</th>
+                                            <th class="cell">CreatedBy</th>
+                                            <th class="cell">CreatedAt</th>
                                             <th class="cell">Actions</th>
                                         </tr>
                                         </thead>
                                         <tbody>
-                                        <tr th:each=" status : ${listD}">
-                                            <td class="cell" th:text="${status.id}"></td>
-                                            <td class="cell" th:text="${status.status1}"></td>
-                                            <td class="cell"> <a th:href="@{'/status/edit?id='+${status.id}}"><i
-                                                    class="fas fa-edit    "></i>Edit</a> | <a
-                                                    th:href="@{'/status/delete?id='+${status.id}}"><i
-                                                    class="fas fa-recycle    "></i>Delete</a></td>
-
-
+                                        <tr th:each=" group : ${listGroupUser}">
+                                            <td class="cell" th:text="${group.id}"></td>
+                                            <td class="cell" th:text="${group.name}"></td>
+                                            <td class="cell" th:text="${group.description}"></td>
+                                            <td class="cell" th:text="${group.createdBy}"></td>
+                                            <td class="cell" th:text="${#dates.format(group.createdAt, 'dd-MM-yyyy')}">Start Date</td>
+                                            <td class="cell">
+                                                <a class="btn-sm app-btn-secondary" th:href="@{'/group/delete?id='+${group.id}}">Delete</a>
+                                                <a class="btn-sm app-btn-secondary" th:href="@{'/group/edit?id='+${group.id}}">Edit</a>
+                                                <a class="btn-sm app-btn-secondary" th:href="@{'/group/viewGroup?id='+${group.id}}">View</a>
+                                                <a class="btn-sm app-btn-secondary" th:href="@{'/group/addMember?id='+${group.id}}">Add member</a>
+                                            </td>
                                         </tr>
 <!--                                        <tr>-->
 <!--                                            <td style="width: 300px" colspan="10">Tổng <span th:text="${count}"></span> bản-->
@@ -117,14 +123,14 @@
                                 ghi trong <span th:text="${totalPage}"> </span> trang </p>
                             <ul class="pagination justify-content-right">
                                 <li th:class="${ page <= 0 ? 'page-item disabled' : 'page-item '}">
-                                    <a class="page-link" th:href="@{'/status/list?page='+${page+(-1)}}" >Previous</a>
+                                    <a class="page-link" th:href="@{'/group/list?page='+${page+(-1)}}" >Previous</a>
                                 </li>
                                 <th:block th:each="i: ${#numbers.sequence(1, totalPage)}">
                                     <li th:class="${page != i - 1 ? 'page-item' : 'page-item active'} ">
-                                        <a class="page-link" th:href="@{'/status/list?page='+${i - 1}}">[[${i}]]</a></li>
+                                        <a class="page-link" th:href="@{'/group/list?page='+${i - 1}}">[[${i}]]</a></li>
                                 </th:block>
                                 <li th:class="${ page == (totalPage - 1) ? 'page-item disabled' : 'page-item '}">
-                                    <a class="page-link" th:href="@{'/status/list?page='+${page+1}}">Next</a>
+                                    <a class="page-link" th:href="@{'/group/list?page='+${page+1}}">Next</a>
                                 </li>
                             </ul>
                         </nav><!--//app-pagination-->

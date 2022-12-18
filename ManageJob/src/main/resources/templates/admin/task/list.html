@@ -112,8 +112,8 @@
                                         <td class="cell" th:text="${task.name}"></td>
                                         <td class="cell" th:text="${task.estimateHourse}"></td>
                                         <td class="cell" th:text="${task.spentTime}"></td>
-                                        <td class="cell" th:text="${task.startDate}"></td>
-                                        <td class="cell" th:text="${task.endDate}"></td>
+                                        <td class="cell" th:text="${#dates.format(task.startDate, 'dd-MM-yyyy')}">Start Date</td>
+                                        <td class="cell" th:text="${#dates.format(task.endDate, 'dd-MM-yyyy')}">End Date</td>
                                         <td class="cell" th:text="${task.modifyBy}"></td>
                                         <td class="cell" th:text="${task.user.name}"></td>
                                         <td class="cell" ><span class="badge bg-danger" th:text="${task.status.status1}"></span></td>
@@ -124,12 +124,12 @@
                                                 th:href="@{'/task/view?id='+${task.id}}"><i
                                                 class="fas fa-recycle    "></i>View</a></td>
                                     </tr>
-                                    <tr>
-                                        <td style="width: 300px" colspan="10">Tổng <span th:text="${count}"></span>
-                                            bản
-                                            ghi trong <span th:text="${totalPage}"> </span> trang
-                                        </td>
-                                    </tr>
+<!--                                    <tr>-->
+<!--                                        <td style="width: 300px" colspan="10">Tổng <span th:text="${count}"></span>-->
+<!--                                            bản-->
+<!--                                            ghi trong <span th:text="${totalPage}"> </span> trang-->
+<!--                                        </td>-->
+<!--                                    </tr>-->
                                     </tbody>
 
                                 </table>
@@ -137,16 +137,18 @@
 
                         </div><!--//app-card-body-->
                     </div><!--//app-card-->
-                    <nav class="app-pagination">
-                        <ul class="pagination justify-content-center">
-                            <li class="page-item">
-                                <a class="page-link" th:href="@{'/task/list?page='+${page+(-1)}}">Previous</a>
+                    <nav class="app-pagination" style="display: flex; justify-content: space-between">
+                        <p  style="width: 300px; font-weight: bold" colspan="10">Tổng <span th:text="${count}"></span> bản
+                            ghi trong <span th:text="${totalPage}"> </span> trang </p>
+                        <ul class="pagination justify-content-right">
+                            <li th:class="${ page <= 0 ? 'page-item disabled' : 'page-item '}">
+                                <a class="page-link" th:href="@{'/task/list?page='+${page+(-1)}}" >Previous</a>
                             </li>
-                            <li class="page-item active"><a class="page-link" th:href="@{/task/list?page=0}">1</a>
-                            </li>
-                            <li class="page-item"><a class="page-link" th:href="@{/task/list?page=1}">2</a></li>
-                            <li class="page-item"><a class="page-link" th:href="@{/task/list?page=2}">3</a></li>
-                            <li class="page-item">
+                            <th:block th:each="i: ${#numbers.sequence(1, totalPage)}">
+                                <li th:class="${page != i - 1 ? 'page-item' : 'page-item active'} ">
+                                    <a class="page-link" th:href="@{'/task/list?page='+${i - 1}}">[[${i}]]</a></li>
+                            </th:block>
+                            <li th:class="${ page == (totalPage - 1) ? 'page-item disabled' : 'page-item '}">
                                 <a class="page-link" th:href="@{'/task/list?page='+${page+1}}">Next</a>
                             </li>
                         </ul>

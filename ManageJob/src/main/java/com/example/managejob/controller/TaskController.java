@@ -1,13 +1,13 @@
 package com.example.managejob.controller;
 
-import com.example.managejob.model.Comment;
-import com.example.managejob.model.Document;
-import com.example.managejob.model.Task;
+import com.example.managejob.model.*;
 import com.example.managejob.repository.*;
+import com.example.managejob.service.TaskExcelExporter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
@@ -19,7 +19,11 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.security.Principal;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -28,6 +32,9 @@ import java.util.regex.Pattern;
 public class TaskController {
     @Autowired
     TaskRepository tr;
+
+    @Autowired
+    GroupUserRepository groupUserRepository;
 
     @Autowired
     DocumentRepository dr;
@@ -56,6 +63,7 @@ public class TaskController {
         session.setAttribute("idTaskI", ID);
         model.addAttribute("listC", cr.searchByTaskId(ID));
         model.addAttribute("listDocument", dr.searchByTaskId(ID));
+        model.addAttribute("listStatus", sr.findAll());
         return "admin/task/view";
     }
 
@@ -280,11 +288,13 @@ public class TaskController {
 
 
     @GetMapping("/myTask")
-    public String myTask(Model model, @RequestParam(value = "page", required = false) Integer page, HttpSession session) {
-        page = (page == null || page < 0) ? 0 : page;
+    public String myTask(Model model, @RequestParam(value = "page", required = false) Integer page,
+                         @RequestParam(value = "pageToDo", required = false) Integer pageToDo, HttpSession session) {
         int size = 5;
-        int id = (int) session.getAttribute("idCurrentUser");
+        //phan trang + get all list
+        page = (page == null || page < 0) ? 0 : page;
         Pageable pageagle = PageRequest.of(page, size);
+        int id = (int) session.getAttribute("idCurrentUser");
         Page<Task> pageUser = tr.findListUserById(id, pageagle);
         model.addAttribute("listD", pageUser.getContent());
         model.addAttribute("totalPage", pageUser.getTotalPages());
@@ -292,6 +302,26 @@ public class TaskController {
         model.addAttribute("size", size);
         long count = pageUser.getContent().size();
         model.addAttribute("count", count);
+
+        // phan trang + get Todo List
+        pageToDo = (pageToDo == null || pageToDo < 0) ? 0 : pageToDo;
+        Pageable pageagleToDo = PageRequest.of(pageToDo, size);
+        Page<Task> pageTodoList = tr.findListByStatusId("Todo List", id, pageagleToDo);
+        model.addAttribute("listToDo", pageTodoList.getContent());
+        model.addAttribute("pageToDo", pageToDo);
+        model.addAttribute("totalPageToDo", pageTodoList.getTotalPages());
+
+        Page<Task> pageReviewList = tr.findListByStatusId("Review", id, pageagle);
+        model.addAttribute("listReview", pageReviewList.getContent());
+
+        Page<Task> pageDoneList = tr.findListByStatusId("Done", id, pageagle);
+        model.addAttribute("listDone", pageDoneList.getContent());
+
+        Page<Task> pageInProgressList = tr.findListByStatusId("In Progress", id, pageagle);
+        model.addAttribute("listInProgress", pageInProgressList.getContent());
+
+        Page<Task> pageCancelList = tr.findListByStatusId("Cancel", id, pageagle);
+        model.addAttribute("listCancel", pageCancelList.getContent());
         return "admin/task/taskUser";
     }
 
@@ -302,6 +332,7 @@ public class TaskController {
         Pageable pageagle = PageRequest.of(page, size);
         Page<Task> pageUser = tr.findAll(pageagle);
         model.addAttribute("listD", pageUser.getContent());
+
         model.addAttribute("totalPage", pageUser.getTotalPages());
         model.addAttribute("page", page);
         model.addAttribute("size", size);
@@ -309,6 +340,45 @@ public class TaskController {
         long count = pageUser.getContent().size();
         model.addAttribute("count", count);
         return "admin/task/list";
+    }
+
+    @GetMapping("/viewTaskUserGroup")
+    public String viewTaskUserGroup(Model model,
+                                    @RequestParam(value = "page", required = false) Integer page,
+                                    @RequestParam(value = "name", required = false) String name,
+                                    @RequestParam(value = "pageToDo", required = false) Integer pageToDo, HttpSession session) {
+        page = (page == null || page < 0) ? 0 : page;
+        int size = 5;
+        //phan trang + get all list
+        page = (page == null || page < 0) ? 0 : page;
+        Pageable pageagle = PageRequest.of(page, size);
+        int id = ur.findByName(name).getId();
+        Page<Task> pageUser = tr.findAllTaskByUserGroup(id, (int) session.getAttribute("idGroup"), pageagle);
+        model.addAttribute("listD", pageUser.getContent());
+        model.addAttribute("totalPage", pageUser.getTotalPages());
+        model.addAttribute("page", page);
+        model.addAttribute("size", size);
+        long count = pageUser.getContent().size();
+        model.addAttribute("count", count);
+
+        // phan trang + get Todo List
+        pageToDo = (pageToDo == null || pageToDo < 0) ? 0 : pageToDo;
+        Pageable pageagleToDo = PageRequest.of(pageToDo, size);
+        Page<Task> pageTodoList = tr.findListByUserGroup("Todo List", id, (int) session.getAttribute("idGroup"), pageagleToDo);
+        model.addAttribute("listToDo", pageTodoList.getContent());
+        model.addAttribute("pageToDo", pageToDo);
+        model.addAttribute("totalPageToDo", pageTodoList.getTotalPages());
+
+        Page<Task> pageReviewList = tr.findListByUserGroup("Review", id, (int) session.getAttribute("idGroup"), pageagle);
+        model.addAttribute("listReview", pageReviewList.getContent());
+
+        Page<Task> pageDoneList = tr.findListByUserGroup("Done", id, (int) session.getAttribute("idGroup"), pageagle);
+        model.addAttribute("listDone", pageDoneList.getContent());
+
+        Page<Task> pageInProgressList = tr.findListByUserGroup("In Progress", id, (int) session.getAttribute("idGroup"), pageagle);
+        model.addAttribute("listInProgress", pageInProgressList.getContent());
+
+        return "admin/task/viewTaskUserGroup";
     }
 
     @GetMapping("/listByStatus")
@@ -362,21 +432,62 @@ public class TaskController {
     }
 
     @GetMapping("/searchTaskUser")
-    public String searchTaskUser(@RequestParam("name") String name, Model model, @RequestParam(value = "page", required = false) Integer page, HttpSession session) {
+    public String searchTaskUser(Model model,
+                                 HttpSession session,
+                                 @RequestParam(value = "page", required = false) Integer page,
+                                 @RequestParam(value = "name", required = false) String name,
+                                 @RequestParam(value = "group", required = false) String group,
+                                 @RequestParam(value = "startDate", required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") Date startDate,
+                                 @RequestParam(value = "endDate", required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") Date endDate
+                                    ) {
         page = page == null || page < 0 ? 0 : page;
         int size = 8;
         Pageable pageagle = PageRequest.of(page, size);
-        Page<Task> pageUser = tr.searchByName(name,(int)session.getAttribute("idCurrentUser"), pageagle);
-        if (name.equalsIgnoreCase("")) {
-            pageUser = tr.findListUserById((int)session.getAttribute("idCurrentUser"), pageagle);
+        int idCurrentUser = (int) session.getAttribute("idCurrentUser");
+        Page<Task> pageTask = null;
+        if (StringUtils.hasText(name) && startDate != null && endDate != null && StringUtils.hasText(group)) {
+            pageTask = tr.searchByNameAndGroupAndDate(name, idCurrentUser, startDate, endDate,group , pageagle);
+        } else if (StringUtils.hasText(name) && StringUtils.hasText(group)) {
+            pageTask = tr.searchByNameAndGroup(name, idCurrentUser, group, pageagle);
+        } else if (StringUtils.hasText(name)) {
+            pageTask = tr.searchByName(name, idCurrentUser, pageagle);
+        } else if(StringUtils.hasText(group)){
+            pageTask = tr.searchByGroup(group, idCurrentUser, pageagle);
+        } else if(startDate != null){
+            pageTask = tr.searchByStartDate(startDate, idCurrentUser, pageagle);
+        }else if(endDate != null){
+            pageTask = tr.searchByEndDate(endDate, idCurrentUser, pageagle);
+        }else if(startDate != null && endDate != null){
+            pageTask = tr.searchByEndDateAndStartDate(startDate, endDate, idCurrentUser, pageagle);
         }
-        model.addAttribute("listD", pageUser.getContent());
-        model.addAttribute("totalPages", pageUser.getTotalPages());
+        else {
+            pageTask = tr.findListUserById((int) session.getAttribute("idCurrentUser"), pageagle);
+        }
+        model.addAttribute("name", name);
+        model.addAttribute("group", group);
+        model.addAttribute("startDate", startDate);
+        model.addAttribute("listD", pageTask.getContent());
+        model.addAttribute("totalPages", pageTask.getTotalPages());
         model.addAttribute("page", page);
         model.addAttribute("size", size);
-        long count = pageUser.getContent().size();
+        model.addAttribute("count", pageTask.getSize());
+        return "admin/task/taskSearch";
+    }
 
-        model.addAttribute("count", count);
-        return "admin/task/taskUser";
+    @GetMapping("/exportExcel")
+    public void exportData(HttpServletResponse response) throws IOException {
+        response.setContentType("application/octet-stream");
+        String headerKey = "Content-Disposition";
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd_HH");
+        String currentDateTime = dateFormat.format(new Date());
+        String fileName = "tasks_" + currentDateTime + ".xlsx";
+        String headerValue = "attachement; filename=" + fileName;
+        response.setHeader(headerKey, headerValue);
+
+        List<Task> listTasks = tr.findAll();
+
+        TaskExcelExporter excelExporter = new TaskExcelExporter(listTasks);
+        excelExporter.export(response);
+
     }
 }
