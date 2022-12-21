@@ -30,11 +30,7 @@ public class LoginService implements UserDetailsService {
         List<SimpleGrantedAuthority> list = new ArrayList<SimpleGrantedAuthority>();
 
         list.add(new SimpleGrantedAuthority(st.getRoleUser().getRole()));
-        /*
-         * for (UserRole role : st.getUserRoles()) { list.add(new
-         * SimpleGrantedAuthority(role.getRole())); }
-         */
-        // tao user cua security // user dang nhap hien tai
+
         User currentUser = new User(name, st.getPassword(), list);
         System.err.println("role current user" + st.getRoleUser().getRole());
 // extend User de them thuoc tinh.

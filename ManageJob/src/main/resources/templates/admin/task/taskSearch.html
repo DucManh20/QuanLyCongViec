@@ -24,9 +24,6 @@
 </head>
 <body>
 <div th:replace="/headerU.html :: main-menu"></div>
-<!--    <div class="col offset-0 mt-4">-->
-<!--        <div th:replace="/header.html :: main-menu"></div>-->
-<!--    </div>-->
 <div style="margin-top: 100px" class="app-wrapper">
     <div class="app-content pt-3 p-md-3 p-lg-4">
         <div class="container-xl">
@@ -124,9 +121,8 @@
                         </div><!--//app-card-body-->
                     </div><!--//app-card-->
                     <nav class="app-pagination" style="display: flex; justify-content: space-between">
-                        <p style="width: 300px; font-weight: bold" colspan="10">Tổng <span th:text="${count}"></span>
-                            bản
-                            ghi
+                        <p style="width: 300px; font-weight: bold" colspan="10">Total <span th:text="${countPageTask}"></span>
+                            records in the page </p>
                         <ul class="pagination justify-content-right">
                             <li class="page-item disabled">
                                 <a class="page-link" th:href="@{'/task/myTask?page='+${page+(-1)}}">Previous</a>
@@ -142,7 +138,6 @@
                     </nav><!--//app-pagination-->
                 </div><!--//tab-pane-->
             </div><!--//tab-content-->
-
         </div><!--//app-card-body-->
     </div><!--//app-card-->
 </div><!--//tab-pane-->
@@ -158,7 +153,6 @@
 
 <!-- Charts JS -->
 <script th:src="@{/plugins/chart.js/chart.min.js}"></script>
-<!--<script th:src="@{/js/index-charts.js}"></script>-->
 
 <!-- Page Specific JS -->
 <script th:src="@{/js/app.js}"></script>

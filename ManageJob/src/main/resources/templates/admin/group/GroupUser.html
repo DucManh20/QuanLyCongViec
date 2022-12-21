@@ -36,10 +36,14 @@
                     <div class="page-utilities">
                         <div class="row g-2 justify-content-start justify-content-md-end align-items-center">
                             <div class="col-auto">
-                                <form class="table-search-form row gx-1 align-items-center">
+                                <form class="table-search-form row gx-1 align-items-center" th:action="@{/group/search}">
                                     <div class="col-auto">
-                                        <input type="text" id="search-orders" name="searchorders"
-                                               class="form-control search-orders" placeholder="Search">
+                                        <input type="text" id="search-orders" name="nameGroup"
+                                               class="form-control search-orders" placeholder="Search by name">
+                                    </div>
+                                    <div class="col-auto">
+                                        <input type="text" id="search-orders1" name="description"
+                                               class="form-control search-orders" placeholder="Search by description">
                                     </div>
                                     <div class="col-auto">
                                         <button type="submit" class="btn app-btn-secondary">Search</button>
@@ -69,12 +73,12 @@
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    <tr th:each=" group : ${listGroupUser}">
-                                        <td class="cell" th:text="${group.id}"></td>
+                                    <tr th:each=" group, iter : ${listGroupUser}">
+                                        <td class="cell" th:text="${iter.count}"></td>
                                         <td class="cell" th:text="${group.name}"></td>
                                         <td class="cell" th:text="${group.description}"></td>
                                         <td class="cell" th:text="${group.createdBy}"></td>
-                                        <td class="cell" th:text="${#dates.format(group.createdAt, 'dd-MM-yyyy')}">
+                                        <td class="cell" th:text="${#dates.format(group.getCreatedAt, 'dd-MM-yyyy')}">
                                             CreatedAt
                                         </td>
                                         <td class="cell">

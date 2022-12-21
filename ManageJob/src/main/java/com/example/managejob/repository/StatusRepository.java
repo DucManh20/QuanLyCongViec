@@ -8,9 +8,11 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-public interface StatusRepository extends JpaRepository<Status, Integer> {
-    @Query("SELECT u FROM Status u WHERE u.status1 LIKE %:x% ")
-    Page<Status> searchByStatus(@Param("x") String status, Pageable pageable);
+import java.util.List;
 
+public interface StatusRepository extends JpaRepository<Status, Integer> {
     Status findByStatus1(String status);
+
+    @Query("SELECT u FROM Status u WHERE u.status1 LIKE %:x% ")
+    List<Status> findByName(@Param("x") String name);
 }

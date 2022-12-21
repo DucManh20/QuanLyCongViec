@@ -61,7 +61,7 @@
                                     <div class="col-auto" style="display: flex !important;">
                                         <div class="item-label" style="margin-right: 20px">
                                             <strong>CreatedAt</strong></div>
-                                        <div class="item-data" th:text="${#dates.format(group.createdAt, 'dd-MM-yyyy')}">
+                                        <div class="item-data" th:text="${#dates.format(group.getCreatedAt, 'dd-MM-yyyy')}">
                                         </div>
 
                                     </div><!--//col-->
@@ -124,16 +124,9 @@
                                         <div class="item-data"><span class="badge bg-success" th:text="${2}"></span>
                                         </div>
                                     </div><!--//col-->
-<!--                                    <div class="col text-end">-->
-<!--                                        <a class="btn-sm app-btn-secondary" th:href="@{#}">View</a>-->
-<!--                                    </div>&lt;!&ndash;//col&ndash;&gt;-->
                                 </div><!--//row-->
                             </div><!--//item-->
                         </div><!--//app-card-body-->
-<!--                        <div class="app-card-footer p-4 mt-auto">-->
-<!--                            <a class="btn app-btn-secondary" href="#">Manage Preferences</a>-->
-<!--                        </div>&lt;!&ndash;//app-card-footer&ndash;&gt;-->
-
                     </div><!--//app-card-->
                 </div><!--//col-->
 

@@ -33,6 +33,8 @@
                         <label for="setting-input-1" class="form-label">Status</label>
                         <input type="text" class="form-control" id="setting-input-1" th:value="${status1}" name="status1" placeholder="Enter status">
                         <span style="color: red" th:text="${errStatus}"></span>
+                        <span style="color: red" th:text="${success}"></span>
+
                     </div>
 
                     <button type="submit" class="btn app-btn-primary">Save Changes</button>

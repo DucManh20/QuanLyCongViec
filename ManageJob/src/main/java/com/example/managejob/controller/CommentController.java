@@ -1,11 +1,13 @@
 package com.example.managejob.controller;
 
+import com.example.managejob.dto.CommentDTO;
 import com.example.managejob.model.Comment;
-import com.example.managejob.model.Status;
 import com.example.managejob.repository.CommentRepository;
-import com.example.managejob.repository.StatusRepository;
 import com.example.managejob.repository.TaskRepository;
 import com.example.managejob.repository.UserRepository;
+import com.example.managejob.service.CommentService;
+import org.modelmapper.ModelMapper;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -17,15 +19,13 @@ import org.springframework.web.bind.annotation.*;
 @Controller
 @RequestMapping("comment")
 public class CommentController {
+    private final ModelMapper modelMapper;
+    private final CommentService commentService;
 
-    @Autowired
-    CommentRepository cr;
-
-    @Autowired
-    TaskRepository tr;
-
-    @Autowired
-    UserRepository ur;
+    public CommentController(ModelMapper modelMapper, CommentService commentService) {
+        this.modelMapper = modelMapper;
+        this.commentService = commentService;
+    }
 
     @GetMapping("/add")
     public String add() {
@@ -33,29 +33,29 @@ public class CommentController {
     }
 
     @PostMapping("/add")
-    public String add(@ModelAttribute("comment") Comment comment) {
-        cr.save(comment);
+    public String add(@ModelAttribute("comment") CommentDTO commentDTO) {
+        Comment comment = modelMapper.map(commentDTO, Comment.class);
+        commentService.createComment(comment);
         return "redirect:/comment/list";
     }
 
     @GetMapping("/delete")
     public String delete(@RequestParam("id") int id) {
-        cr.deleteById(id);
+        commentService.deleteComment(id);
         return "redirect:/comment/list";
     }
 
     @GetMapping("/list")
     public String list(Model model, @RequestParam(value = "page", required = false) Integer page) {
         page = (page == null || page < 0) ? 0 : page;
-        int size = 5;
+        int size = 10;
         Pageable pageagle = PageRequest.of(page, size);
-        Page<Comment> pageUser = cr.findAll(pageagle);
+        Page<Comment> pageUser = commentService.getAllComment(pageagle);
         model.addAttribute("listD", pageUser.getContent());
         model.addAttribute("totalPage", pageUser.getTotalPages());
         model.addAttribute("page", page);
         model.addAttribute("size", size);
-//        model.addAttribute("listD", pageUser);
-        long count = cr.count();
+        long count = commentService.count();
         model.addAttribute("count", count);
         return "admin/comment/list";
     }

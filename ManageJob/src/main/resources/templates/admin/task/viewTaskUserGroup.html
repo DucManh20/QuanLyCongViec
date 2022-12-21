@@ -18,14 +18,10 @@
           crossorigin="anonymous">
     <link th:href="@{/css/portal.css}" rel="stylesheet"/>
     <script th:src="@{//code.jquery.com/jquery-3.3.1.min.js}"></script>
-<!--    <script th:src="@{/js/tab.js}"></script>-->
 
 </head>
 <body class="app">
 <div th:replace="/headerU.html :: main-menu"></div>
-<!--    <div class="col offset-0 mt-4">-->
-<!--        <div th:replace="/header.html :: main-menu"></div>-->
-<!--    </div>-->
 <div style="margin-top: 100px" class="app-wrapper">
     <div class="app-content pt-3 p-md-3 p-lg-4">
         <div class="container-xl" style="margin-top: -90px">
@@ -169,6 +165,7 @@
                     <div class="app-card app-card-orders-table shadow-sm mb-5">
                         <div class="app-card-body">
                             <div class="table-responsive">
+                                <!--Table -->
                                 <table class="table app-table-hover mb-0 text-left">
                                     <thead>
                                     <tr>
@@ -486,7 +483,6 @@
 
 <!-- Charts JS -->
 <script th:src="@{/plugins/chart.js/chart.min.js}"></script>
-<!--<script th:src="@{/js/index-charts.js}"></script>-->
 
 <!-- Page Specific JS -->
 <script th:src="@{/js/app.js}"></script>

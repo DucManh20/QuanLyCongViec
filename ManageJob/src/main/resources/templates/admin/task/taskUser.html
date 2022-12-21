@@ -24,9 +24,6 @@
 </head>
 <body class="app">
 <div th:replace="/headerU.html :: main-menu"></div>
-<!--    <div class="col offset-0 mt-4">-->
-<!--        <div th:replace="/header.html :: main-menu"></div>-->
-<!--    </div>-->
 <div style="margin-top: 100px" class="app-wrapper">
     <div class="app-content pt-3 p-md-3 p-lg-4">
         <div style="margin-top: -90px " class="container-xl">
@@ -124,8 +121,8 @@
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    <tr th:each=" task : ${listD}">
-                                        <td class="cell" th:text="${task.id}"></td>
+                                    <tr th:each=" task, iter : ${listD}">
+                                        <td class="cell" th:text="${iter.count}"></td>
                                         <td class="cell" th:text="${task.name}"></td>
                                         <td class="cell" th:text="${task.group.name}"></td>
                                         <td class="cell" th:text="${task.description}"></td>
@@ -185,8 +182,8 @@
                                     <tbody>
 
 
-                                    <tr th:each=" task : ${listToDo}" onclick="window.location= '#'" ;>
-                                        <td class="cell" th:text="${task.id}"></td>
+                                    <tr th:each=" task, iter : ${listToDo}" onclick="window.location= '#'" ;>
+                                        <td class="cell" th:text="${iter.count}"></td>
                                         <td class="cell" th:text="${task.name}"></td>
                                         <td class="cell" th:text="${task.group.name}"></td>
                                         <td class="cell" th:text="${task.description}"></td>
@@ -248,9 +245,8 @@
                                     </thead>
                                     <tbody>
 
-
-                                    <tr th:each=" task : ${listInProgress}" onclick="window.location= '#'" ;>
-                                        <td class="cell" th:text="${task.id}"></td>
+                                    <tr th:each=" task, iter : ${listInProgress}">
+                                        <td class="cell" th:text="${iter.count}"></td>
                                         <td class="cell" th:text="${task.name}"></td>
                                         <td class="cell" th:text="${task.group.name}"></td>
                                         <td class="cell" th:text="${task.description}"></td>
@@ -314,8 +310,8 @@
                                     <tbody>
 
 
-                                    <tr th:each=" task : ${listReview}" onclick="window.location= '#'" ;>
-                                        <td class="cell" th:text="${task.id}"></td>
+                                    <tr th:each=" task, iter : ${listReview}" onclick="window.location= '#'" ;>
+                                        <td class="cell" th:text="${iter.count}"></td>
                                         <td class="cell" th:text="${task.name}"></td>
                                         <td class="cell" th:text="${task.group.name}"></td>
                                         <td class="cell" th:text="${task.description}"></td>
@@ -376,8 +372,8 @@
                                     <tbody>
 
 
-                                    <tr th:each=" task : ${listDone}" onclick="window.location= '#'" ;>
-                                        <td class="cell" th:text="${task.id}"></td>
+                                    <tr th:each=" task, iter : ${listDone}" onclick="window.location= '#'" ;>
+                                        <td class="cell" th:text="${iter.count}"></td>
                                         <td class="cell" th:text="${task.name}"></td>
                                         <td class="cell" th:text="${task.group.name}"></td>
                                         <td class="cell" th:text="${task.description}"></td>
@@ -439,8 +435,8 @@
                                     <tbody>
 
 
-                                    <tr th:each=" task : ${listCancel}">
-                                        <td class="cell" th:text="${task.id}"></td>
+                                    <tr th:each=" task, iter : ${listCancel}">
+                                        <td class="cell" th:text="${iter.count}"></td>
                                         <td class="cell" th:text="${task.name}"></td>
                                         <td class="cell" th:text="${task.group.name}"></td>
                                         <td class="cell" th:text="${task.description}"></td>
@@ -479,7 +475,6 @@
                             </li>
                         </ul>
                     </nav><!--//app-pagination-->
-
                 </div><!--//tab-pane-->
             </div><!--//tab-content-->
 

@@ -13,8 +13,6 @@ public class ExceptionController {
     public String exception(Exception exception){
         logger.error(exception);
         exception.printStackTrace();
-        System.err.println(exception);
-        System.err.println("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=");
         return "error403";
     }
 }

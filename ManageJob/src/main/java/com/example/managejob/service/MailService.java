@@ -27,7 +27,7 @@ public class MailService {
             // load template email with content
             Context context = new Context();
             context.setVariable("contentMail", body);
-            String html = templateEngine.process("system/Mail.html", context);
+            String html = templateEngine.process("system/mail.html", context);
             /// send email
             helper.setTo(to);// email gui toi
             helper.setText(html, true);// nd mail
@@ -35,9 +35,7 @@ public class MailService {
             helper.setFrom("manh7135@gmail.com");
             javaMailSender.send(message);
         } catch (MessagingException e) {
-            System.out.println("fail");
             e.printStackTrace();
-//		    logger.error("Email sent with error: " + e.getMessage());
         }
     }
 }

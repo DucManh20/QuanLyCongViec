@@ -14,24 +14,6 @@ import java.util.Locale;
 
 @Configuration
 public class AppConfig implements WebMvcConfigurer {
-//    @Bean
-//    public LocaleResolver localeResolver() {
-//        SessionLocaleResolver slr = new SessionLocaleResolver();
-//        slr.setDefaultLocale(new Locale("en"));
-//        return slr;
-//    }
-//
-//    @Bean
-//    public LocaleChangeInterceptor localeChangeInterceptor() {
-//        LocaleChangeInterceptor lci = new LocaleChangeInterceptor();
-//        lci.setParamName("lang");
-//        return lci;
-//    }
-//
-//    @Override
-//    public void addInterceptors(InterceptorRegistry registry) {
-//        registry.addInterceptor(localeChangeInterceptor());
-//    }
 
     @Bean
     public LocaleResolver localeResolver() {
@@ -53,10 +35,10 @@ public class AppConfig implements WebMvcConfigurer {
     }
 
     @Bean
-    public MessageSource messageSource(){
+    public MessageSource messageSource() {
         ResourceBundleMessageSource messageSource = new ResourceBundleMessageSource();
         messageSource.setBasenames("lang/message");
         messageSource.setDefaultEncoding("UTF-8");
-        return  messageSource;
+        return messageSource;
     }
 }

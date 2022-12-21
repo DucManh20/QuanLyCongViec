@@ -25,7 +25,7 @@ public class Comment {
 
     @CreatedDate
     @Column(name = "created_at", updatable = false)
-    private Date CreatedAt;
+    private Date createdAt;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")

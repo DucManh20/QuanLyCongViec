@@ -1,7 +1,6 @@
 package com.example.managejob.repository;
 
 import com.example.managejob.model.Task;
-import com.example.managejob.model.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -35,27 +34,8 @@ public interface TaskRepository extends JpaRepository<Task, Integer> {
     Task findByName(String name);
 
     // filter
-    @Query("SELECT u FROM Task u WHERE u.name LIKE %:x% AND u.user.id =:idCurrentUser AND u.startDate >= :start AND u.endDate <= :end AND u.group.name LIKe %:nameGroup%")
-    Page<Task> searchByNameAndGroupAndDate(@Param("x") String name, @Param("idCurrentUser") int idCurrentUser, @Param("start") Date start, @Param("end") Date end, @Param("nameGroup") String nameGroup, Pageable pageable);
-
-    @Query("SELECT u FROM Task u WHERE u.name LIKE %:x% and u.user.id =:idCurrentUser AND u.group.name LIKE %:nameGroup%")
-    Page<Task> searchByNameAndGroup(@Param("x") String name, @Param("idCurrentUser") int idCurrentUser, @Param("nameGroup") String nameGroup, Pageable pageable);
-
+    @Query("SELECT  u FROM Task u WHERE  (:start is null or u.startDate >= :start)  and (:end is null or u.endDate <= :end) and (:nameGroup is null or u.group.name LIKE %:nameGroup% ) and (:name is null or u.name LIKE %:name% )  and u.user.id =:id")
+    Page<Task> search(@Param("start") Date startDated, @Param("end") Date endDate,@Param("nameGroup") String nameGroup,@Param("name") String name, int id, Pageable pageable);
     @Query("SELECT u FROM Task u WHERE u.name LIKE %:x% ")
     Page<Task> searchByName(@Param("x") String name, Pageable pageable);
-
-    @Query("SELECT u FROM Task u WHERE u.name LIKE %:x% and u.user.id =:id")
-    Page<Task> searchByName(@Param("x") String name,int id, Pageable pageable);
-
-    @Query("SELECT u FROM Task u WHERE u.group.name LIKE %:x% and u.user.id =:id")
-    Page<Task> searchByGroup(@Param("x") String name,int id, Pageable pageable);
-
-    @Query("SELECT u FROM Task u WHERE u.startDate >= :start  and u.user.id =:id")
-    Page<Task> searchByStartDate(@Param("start") Date date,int id, Pageable pageable);
-
-    @Query("SELECT  u FROM Task u WHERE u.endDate <= :end  and u.user.id =:id")
-    Page<Task> searchByEndDate(@Param("end") Date date,int id, Pageable pageable);
-
-    @Query("SELECT  u FROM Task u WHERE  (:start is null or u.startDate >= :start)  and u.endDate <= :end and u.user.id =:id")
-    Page<Task> searchByEndDateAndStartDate(@Param("start") Date startDated, @Param("end") Date endDate,int id, Pageable pageable);
 }

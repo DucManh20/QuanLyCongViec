@@ -18,15 +18,14 @@
           crossorigin="anonymous">
     <link th:href="@{/css/portal.css}" rel="stylesheet"/>
 </head>
-<body>
+<body class="app">
 <div class="col offset-0 mt-4">
-
 </div>
 <div th:replace="/header.html :: main-menu"></div>
 <div style="margin-top: 100px" class="app-wrapper">
 
     <div class="app-content pt-3 p-md-3 p-lg-4">
-        <div class="container-xl">
+        <div style="margin-top: -90px;" class="container-xl">
 
             <div class="row g-3 mb-4 align-items-center justify-content-between">
                 <div class="col-auto">
@@ -96,8 +95,7 @@
                                     <tr>
                                         <th class="cell">ID</th>
                                         <th class="cell">Name</th>
-                                        <th class="cell">Estimate Hourse</th>
-                                        <th class="cell">Spent Time</th>
+                                        <th class="cell">Description</th>
                                         <th class="cell">Start Date</th>
                                         <th class="cell">End Date</th>
                                         <th class="cell">Created By</th>
@@ -110,8 +108,8 @@
                                     <tr th:each=" task : ${listD}">
                                         <td class="cell" th:text="${task.id}"></td>
                                         <td class="cell" th:text="${task.name}"></td>
-                                        <td class="cell" th:text="${task.estimateHourse}"></td>
-                                        <td class="cell" th:text="${task.spentTime}"></td>
+                                        <td class="cell" th:text="${task.description}"></td>
+
                                         <td class="cell" th:text="${#dates.format(task.startDate, 'dd-MM-yyyy')}">Start Date</td>
                                         <td class="cell" th:text="${#dates.format(task.endDate, 'dd-MM-yyyy')}">End Date</td>
                                         <td class="cell" th:text="${task.modifyBy}"></td>
@@ -124,12 +122,6 @@
                                                 th:href="@{'/task/view?id='+${task.id}}"><i
                                                 class="fas fa-recycle    "></i>View</a></td>
                                     </tr>
-<!--                                    <tr>-->
-<!--                                        <td style="width: 300px" colspan="10">Tổng <span th:text="${count}"></span>-->
-<!--                                            bản-->
-<!--                                            ghi trong <span th:text="${totalPage}"> </span> trang-->
-<!--                                        </td>-->
-<!--                                    </tr>-->
                                     </tbody>
 
                                 </table>
@@ -138,7 +130,7 @@
                         </div><!--//app-card-body-->
                     </div><!--//app-card-->
                     <nav class="app-pagination" style="display: flex; justify-content: space-between">
-                        <p  style="width: 300px; font-weight: bold" colspan="10">Tổng <span th:text="${count}"></span> bản
+                        <p  style="width: 300px; font-weight: bold" colspan="10">Tổng <span th:text="${count1}"></span> bản
                             ghi trong <span th:text="${totalPage}"> </span> trang </p>
                         <ul class="pagination justify-content-right">
                             <li th:class="${ page <= 0 ? 'page-item disabled' : 'page-item '}">
@@ -157,7 +149,6 @@
                 </div><!--//tab-pane-->
             </div><!--//container-fluid-->
         </div><!--//app-content-->
-
         <footer class="app-footer">
         </footer><!--//app-footer-->
 

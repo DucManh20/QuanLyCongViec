@@ -12,7 +12,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
-import java.security.Principal;
 import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -206,7 +205,7 @@ public class SystemController {
     @GetMapping("/checkCode")
     public String checkCode(Model model) {
         model.addAttribute("message", "");
-        return "system/CheckCode";
+        return "system/checkCode";
     }
 
     @PostMapping("/checkCode")
@@ -215,6 +214,6 @@ public class SystemController {
             return "system/newPassword";
         }
         model.addAttribute("message", "Mã code không đúng!");
-        return "system/CheckCode";
+        return "system/checkCode";
     }
 }

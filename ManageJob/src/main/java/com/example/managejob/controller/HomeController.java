@@ -13,7 +13,6 @@ import java.security.Principal;
 @RequestMapping("/")
 @Controller
 public class HomeController {
-
     @Autowired
     UserRepository ur;
 

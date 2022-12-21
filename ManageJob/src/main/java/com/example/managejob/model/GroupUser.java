@@ -9,7 +9,6 @@ import org.springframework.data.annotation.CreatedDate;
 import javax.persistence.*;
 import java.util.Date;
 import java.util.List;
-import java.util.Set;
 
 @Data
 @Entity
@@ -33,7 +32,7 @@ public class GroupUser {
 
     @CreatedDate
     @Column(name="createdAt")
-    private Date CreatedAt;
+    private Date createdAt;
 
     @OneToMany(mappedBy = "group",cascade =CascadeType.ALL)
     @JsonManagedReference

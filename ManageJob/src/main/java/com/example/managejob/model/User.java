@@ -1,5 +1,6 @@
 package com.example.managejob.model;
 
+import com.example.managejob.service.AuthenticationProvider;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.AllArgsConstructor;
@@ -32,13 +33,9 @@ public class User {
     @Column(nullable = false, unique = true, length = 150)
     private String email;
 
-//    @Column(name = "role", length = 30)
-//    private String role;
-
-//    @JsonManagedReference
-//    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
-//    private List<RoleUser> userRoles;
-
+    @Enumerated(EnumType.STRING)
+    @Column(name = "auth_provider")
+    private AuthenticationProvider authenticationProvider;
 
     @Column(name = "avatar", length = 150)
     private String avatar;

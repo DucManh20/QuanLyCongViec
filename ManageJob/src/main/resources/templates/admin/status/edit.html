@@ -31,11 +31,13 @@
                               method="post">
                             <div class="mb-3">
                                 <label for="setting-input-1" class="form-label">Status</label>
-                                <input type="text" class="form-control" id="setting-input-1" th:value="${status.status1}" name="status1" placeholder="Enter status">
+                                <input type="text" class="form-control" id="setting-input-1"
+                                       th:value="${statusDTO.status1}" name="status1" placeholder="Enter status">
                                 <span style="color: red" th:text="${errStatus}"></span>
+                                <span style="color: red" th:text="${success}"></span>
                             </div>
                             <button type="submit" class="btn app-btn-primary">Save Changes</button>
-                            <a class="btn app-btn-primary" th:href="@{/status/list}" >List Status</a>
+                            <a class="btn app-btn-primary" th:href="@{/status/list}">List Status</a>
 
                         </form>
                     </div><!--//app-card-body-->
