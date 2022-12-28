@@ -1,18 +1,18 @@
 package com.example.managejob.controller;
 
+import com.example.managejob.dto.UserDTO;
 import com.example.managejob.model.User;
-import com.example.managejob.repository.UserRepository;
 import com.example.managejob.service.MailService;
+import com.example.managejob.service.SystemService;
+import com.example.managejob.service.UserService;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
-import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -20,12 +20,15 @@ import java.util.regex.Pattern;
 @RequestMapping("system")
 public class SystemController {
 
-    private  static Logger logger = Logger.getLogger(SystemController.class);
+    private final Logger logger = Logger.getLogger(SystemController.class);
     @Autowired
     MailService mailService;
 
     @Autowired
-    UserRepository ur;
+    UserService userService;
+
+    @Autowired
+    SystemService systemService;
 
     @GetMapping("/error403")
     public String error403() {
@@ -39,7 +42,8 @@ public class SystemController {
     }
 
     @GetMapping("/login")
-    public String login(Model model, @RequestParam(name = "e", required = false) String error) {
+    public String login(Model model, @RequestParam(name = "e", required = false) String error
+            , @RequestParam(name = "g-recaptcha-response", required = false) String captchaResponse) {
         model.addAttribute("message", "");
         if (error != null) {
             model.addAttribute("e", error);
@@ -49,10 +53,9 @@ public class SystemController {
     }
 
 
-
     @GetMapping("/")
     public String home() {
-        return "headerU.html";
+        return "system/overView";
     }
 
     @GetMapping("/register")
@@ -65,65 +68,10 @@ public class SystemController {
     }
 
     @PostMapping("/register")
-    public String register(@ModelAttribute User user, Model model, @RequestParam("password1") String Password1, HttpSession session) {
-        int k = 0;
-        Pattern pattern = Pattern.compile("^[a-zA-Z0-9]{6,}$");
-        Matcher m = pattern.matcher(user.getName());
-
-        Pattern pattern1 = Pattern.compile("^[0-9a-zA-Z]{6,}$");
-        Matcher m1 = pattern1.matcher(user.getPassword());
-
-        Pattern pattern2 = Pattern.compile("^[a-zA-Z0-9_!#$%&'*+/=?`{|}~^.-]+@[a-zA-Z0-9.-]+$");
-        Matcher m2 = pattern2.matcher(user.getEmail());
-
-        User userCheck = ur.findByName(user.getName());
-
-        if (userCheck != null) {
-            model.addAttribute("errName", "Tên người dùng đã tồn tại");
-            k = 1;
-        }
-        if (!m.find()) {
-            model.addAttribute("errName", "Nhập độ dài lớn hơn 6 ký tự");
-            k = 1;
-        }
-
-        if (!m1.find()) {
-            model.addAttribute("errPass", "Nhập độ dài lớn hơn 6 ký tự");
-            k = 1;
-        }
-
-        if (!m2.find()) {
-            model.addAttribute("errEmail", "Nhập sai định dạng(VD: A@gmail.com)");
-            k = 1;
-        }
-
-        if (!user.getPassword().equals(Password1)) {
-            model.addAttribute("errPass1", "Mật khẩu không khớp");
-            k = 1;
-        }
-
-        if (k == 1) {
-            model.addAttribute("name", user.getName());
-            model.addAttribute("email", user.getEmail());
-            model.addAttribute("pass", user.getPassword());
-            model.addAttribute("pass1", Password1);
-            return "system/register";
-        } else {
-//            user.setRole("ROLE_MEMBER");
-            user.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));
-            user.setCreatedAt(new Date(System.currentTimeMillis()));
-            session.setAttribute("user", user);
-
-            int code = 0;
-            code = (int) (Math.random() * 100000);
-            System.err.println(code);
-            System.err.println(user.getEmail());
-
-            mailService.sendEmail(user.getEmail(), "a", code + "");
-            session.setAttribute("code", code);
-            return "redirect:/system/checkCode";
-            //ur.save(user);
-        }
+    public String register(@ModelAttribute UserDTO userDTO, Model model, @RequestParam("password1") String password,
+                           @RequestParam(name="g-recaptcha-response") String captchaResponse) {
+        systemService.register(userDTO, model, password, captchaResponse);
+        return "system/register";
     }
 
     @GetMapping("/forgotPassword")
@@ -133,34 +81,19 @@ public class SystemController {
 
     @PostMapping("/forgotPassword")
     public String forgotPassword(Model model, @RequestParam("email") String email, HttpSession session) {
-        int k = 0;
-        Pattern pattern2 = Pattern.compile("^[a-zA-Z0-9_!#$%&'*+/=?`{|}~^.-]+@[a-zA-Z0-9.-]+$");
-        Matcher m2 = pattern2.matcher(email);
-
-        User user = ur.findByEmail(email);
-        if (user == null) {
-            model.addAttribute("message", "Email is not registered");
-            k = 1;
-        }
-        if (!m2.find()) {
-            model.addAttribute("message", "Wrong format (EX: A@gmail.com)");
-            k = 1;
-        }
-
+        int k = systemService.forgotPassword(model, email);
         if (k == 1) {
             model.addAttribute("emailInput", email);
             return "system/forgotPassword";
-        } else{
-            int code = 0;
-            code =(int) (Math.random() * 100000);
+        } else {
+            int code;
+            code = (int) (Math.random() * 100000);
             session.setAttribute("code", code);
             session.setAttribute("emailUserCurrent", email);
             model.addAttribute("message", "email is in progress");
 
             mailService.sendEmail("manh7135@gmai.com", "a", code + "");
         }
-
-
         return "redirect:/system/checkCode";
     }
 
@@ -172,7 +105,6 @@ public class SystemController {
     @PostMapping("/newPassword")
     public String newPassword(Model model, HttpSession session, @RequestParam String newPassword, @RequestParam String confirmPassword) {
         int k = 0;
-
         Pattern pattern = Pattern.compile("^[a-zA-Z0-9]{4,}$");
         Matcher m1 = pattern.matcher(confirmPassword);
         Matcher m2 = pattern.matcher(newPassword);
@@ -187,19 +119,22 @@ public class SystemController {
             k = 1;
         }
 
-        if(!newPassword.equals(confirmPassword)){
+        if (!newPassword.equals(confirmPassword)) {
             model.addAttribute("errConfirmPass", "Password does not match");
             k = 1;
         }
-        if(k == 1){
+        if (k == 1) {
             return "system/newPassword";
-        }else {
-            User user = ur.findByEmail((String)session.getAttribute("emailUserCurrent"));
+        } else {
+            User user;
+            user = userService.findByEmail((String) session.getAttribute("emailUserCurrent"));
+            if (user == null) {
+                user = userService.findById((int) session.getAttribute("idCurrentUser"));
+            }
             user.setPassword(new BCryptPasswordEncoder().encode(newPassword));
-            ur.save(user);
+            userService.saveUser(user);
             return "redirect:/system/login";
         }
-
     }
 
     @GetMapping("/checkCode")

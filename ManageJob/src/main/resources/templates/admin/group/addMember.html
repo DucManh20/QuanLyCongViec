@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>List</title>
+    <title>Add Member</title>
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport"
@@ -33,12 +33,12 @@
                         <label for="setting-input-1" class="form-label">Member</label>
                         <input type="text" class="form-control" id="setting-input-1" th:value="${emailName}" name="emailName" placeholder="Enter user name or email">
                         <span style="color: red" th:text="${errEmailUser}"></span>
+                        <span style="color: red" th:text="${success}"></span>
                     </div>
 
                     <button type="submit" class="btn app-btn-primary">Add</button>
                     <a class="btn app-btn-primary" th:href="@{/group/view}">List member</a>
                     <a class="btn app-btn-primary" th:href="@{/group/list}">List group</a>
-
                 </form>
             </div><!--//app-card-body-->
 

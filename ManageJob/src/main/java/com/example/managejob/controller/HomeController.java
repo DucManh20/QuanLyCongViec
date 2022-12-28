@@ -1,6 +1,6 @@
 package com.example.managejob.controller;
 
-import com.example.managejob.repository.UserRepository;
+import com.example.managejob.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,7 +14,7 @@ import java.security.Principal;
 @Controller
 public class HomeController {
     @Autowired
-    UserRepository ur;
+    UserService userService;
 
     @GetMapping("/")
     public String home(){
@@ -28,11 +28,24 @@ public class HomeController {
             session.setAttribute("imgAvatar", "/user/download?filename=tda.jpg");
         } else {
             String pathAvatar = "/user/download?filename=";
-            String avatar = ur.findByName(principal.getName()).getAvatar();
-            session.setAttribute("imgAvatar", pathAvatar + avatar);
-            session.setAttribute("currentUser", principal.getName());
-            session.setAttribute("idCurrentUser", ur.findByName(principal.getName()).getId());
+            String emailUser = (String)session.getAttribute("emailUser");
+            if(emailUser != null){
+                String avatar = userService.findByEmail(emailUser).getAvatar();
+                session.setAttribute("imgAvatar", pathAvatar + avatar);
+                session.setAttribute("currentUser", userService.findByEmail(emailUser).getName());
+                session.setAttribute("idCurrentUser", userService.findByEmail(emailUser).getId());
+            }else{
+                String avatar = userService.findByName(principal.getName()).getAvatar();
+                session.setAttribute("imgAvatar", pathAvatar + avatar);
+                session.setAttribute("currentUser", principal.getName());
+                session.setAttribute("idCurrentUser", userService.findByName(principal.getName()).getId());
+            }
 
         }
     }
 }
+
+//       if (principal == null) {
+//               session.setAttribute("currentUser", "Account");
+//               session.setAttribute("imgAvatar", "/user/download?filename=tda.jpg");
+//               }

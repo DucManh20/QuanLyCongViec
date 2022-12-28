@@ -1,6 +1,5 @@
 package com.example.managejob.utils;
 
-import com.example.managejob.dto.StatusDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -8,6 +7,11 @@ import org.springframework.data.domain.Pageable;
 import java.util.List;
 
 public class ConvertListToPage {
+
+    public ConvertListToPage() {
+        throw new UnsupportedOperationException();
+    }
+
     public static Page toPage(List list, Pageable pageable) {
         if (pageable.getOffset() >= list.size()) {
             return Page.empty();

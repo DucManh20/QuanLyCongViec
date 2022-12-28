@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>List</title>
+    <title>List Task</title>
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport"
@@ -9,11 +9,11 @@
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet"
-          href="https://use.fontawesome.com/releases/v5.1.1/css/all.css"
+          th:href="@{https://use.fontawesome.com/releases/v5.1.1/css/all.css}"
           integrity="sha384-O8whS3fhG2OnA5Kas0Y9l3cfpmYjapjI0E4theH4iuMD+pLhbf6JI0jIMfYcK3yZ"
           crossorigin="anonymous">
     <link rel="stylesheet"
-          href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          th:href="@{https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css}"
           integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
           crossorigin="anonymous">
     <link th:href="@{/css/portal.css}" rel="stylesheet"/>
@@ -35,7 +35,7 @@
                     <div class="page-utilities">
                         <div class="row g-2 justify-content-start justify-content-md-end align-items-center">
                             <div class="col-auto">
-                                <form class="table-search-form row gx-1 align-items-center" method=""
+                                <form class="table-search-form row gx-1 align-items-center"
                                       th:action="@{/task/search}">
                                     <div class="col-auto">
                                         <input type="text" id="search-orders" name="name"
@@ -48,16 +48,6 @@
 
                             </div><!--//col-->
                             <div class="col-auto">
-
-                                <select class="form-select w-auto">
-                                    <option selected value="option-1">All</option>
-                                    <option value="option-2">This week</option>
-                                    <option value="option-3">This month</option>
-                                    <option value="option-4">Last 3 months</option>
-
-                                </select>
-                            </div>
-                            <div class="col-auto">
                                 <a th:href="@{/task/add}" class="btn app-btn-secondary">Add new task</a>
                             </div>
                             <div class="col-auto">
@@ -69,7 +59,7 @@
                                         <path fill-rule="evenodd"
                                               d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z"/>
                                     </svg>
-                                    Download CSV
+                                    Export Data
                                 </a>
                             </div>
                         </div><!--//row-->
@@ -105,8 +95,8 @@
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    <tr th:each=" task : ${listD}">
-                                        <td class="cell" th:text="${task.id}"></td>
+                                    <tr th:each=" task, iter : ${listD}">
+                                        <td class="cell" th:text="${iter.count}"></td>
                                         <td class="cell" th:text="${task.name}"></td>
                                         <td class="cell" th:text="${task.description}"></td>
 
@@ -115,11 +105,11 @@
                                         <td class="cell" th:text="${task.modifyBy}"></td>
                                         <td class="cell" th:text="${task.user.name}"></td>
                                         <td class="cell" ><span class="badge bg-danger" th:text="${task.status.status1}"></span></td>
-                                        <td class="cell"><a th:href="@{'/task/edit?id='+${task.id}}"><i
-                                                class="fas fa-edit    "></i>Edit</a> | <a
-                                                th:href="@{'/task/delete?id='+${task.id}}"><i
-                                                class="fas fa-recycle    "></i>Delete</a>| <a
-                                                th:href="@{'/task/view?id='+${task.id}}"><i
+                                        <td class="cell"><a th:href="@{'/task/edit?id='+${task.id}}" class="btn-sm app-btn-secondary"><i
+                                                class="fas fa-edit    "></i>Edit</a>  <a
+                                                th:href="@{'/task/delete?id='+${task.id}}" class="btn-sm app-btn-secondary"><i
+                                                class="fas fa-recycle    "></i>Delete</a> <a
+                                                th:href="@{'/task/view?id='+${task.id}}" class="btn-sm app-btn-secondary"><i
                                                 class="fas fa-recycle    "></i>View</a></td>
                                     </tr>
                                     </tbody>
@@ -130,7 +120,7 @@
                         </div><!--//app-card-body-->
                     </div><!--//app-card-->
                     <nav class="app-pagination" style="display: flex; justify-content: space-between">
-                        <p  style="width: 300px; font-weight: bold" colspan="10">Tổng <span th:text="${count1}"></span> bản
+                        <p  style="width: 300px; font-weight: bold">Tổng <span th:text="${count1}"></span> bản
                             ghi trong <span th:text="${totalPage}"> </span> trang </p>
                         <ul class="pagination justify-content-right">
                             <li th:class="${ page <= 0 ? 'page-item disabled' : 'page-item '}">

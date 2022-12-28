@@ -1,12 +1,9 @@
 package com.example.managejob.service;
 
 import com.example.managejob.dto.TaskDTO;
-import com.example.managejob.model.Task;
 import org.springframework.ui.Model;
 import org.springframework.web.multipart.MultipartFile;
-
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.security.Principal;
 import java.util.Date;
 
@@ -21,7 +18,7 @@ public interface TaskService {
 
     void view(String content, Principal principal, MultipartFile multipartFile, Model model);
 
-    void ExportData(HttpServletResponse response);
+    void exportData(HttpServletResponse response);
 
     void getList(Integer page, Model model);
 

@@ -44,6 +44,9 @@ public class Task {
     @Column(name = "modifi_by", length = 150)
     private String modifyBy;
 
+    @Column(name="check_date", length = 2)
+    private int check;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false, referencedColumnName = "id")
     @JsonBackReference

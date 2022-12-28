@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>List</title>
+    <title>Group</title>
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport"
@@ -9,19 +9,18 @@
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet"
-          href="https://use.fontawesome.com/releases/v5.1.1/css/all.css"
+          th:href="@{https://use.fontawesome.com/releases/v5.1.1/css/all.css}"
           integrity="sha384-O8whS3fhG2OnA5Kas0Y9l3cfpmYjapjI0E4theH4iuMD+pLhbf6JI0jIMfYcK3yZ"
           crossorigin="anonymous">
     <link rel="stylesheet"
-          href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          th:href="@{https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css}"
           integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
           crossorigin="anonymous">
     <link th:href="@{/css/portal.css}" rel="stylesheet"/>
 </head>
-<body>
+<body class="app">
 <div th:replace="/headerU.html :: main-menu"></div>
 <div class="app-wrapper">
-
     <div class="app-content pt-3 p-md-3 p-lg-4">
         <div class="container-xl">
 
@@ -61,7 +60,8 @@
                                     <div class="col-auto" style="display: flex !important;">
                                         <div class="item-label" style="margin-right: 20px">
                                             <strong>CreatedAt</strong></div>
-                                        <div class="item-data" th:text="${#dates.format(group.getCreatedAt, 'dd-MM-yyyy')}">
+                                        <div class="item-data"
+                                             th:text="${#dates.format(group.getCreatedAt, 'dd-MM-yyyy')}">
                                         </div>
 
                                     </div><!--//col-->
@@ -72,7 +72,7 @@
                                     <div class="col-auto" style="display: flex !important;">
                                         <div class="item-label" style="margin-right: 20px">
                                             <strong>CreatedBy</strong></div>
-                                        <div class="item-data"  th:text="${group.createdBy}">
+                                        <div class="item-data" th:text="${group.createdBy}">
                                         </div>
                                     </div><!--//col-->
                                 </div><!--//row-->
@@ -104,19 +104,21 @@
                         <div class="app-card-body px-4 w-100">
                             <div class="item border-bottom py-3" th:each="user : ${listUser}">
                                 <div class="row justify-content-between align-items-center">
-                                    <div class="col-auto" >
+                                    <div class="col-auto">
                                         <div class="item-data" th:text="${user.name}"></div>
                                     </div><!--//col-->
                                     <div class="col text-end">
-                                        <a class="btn-sm app-btn-secondary" th:href="@{'/task/viewTaskUserGroup?name='+ ${user.name}}">View task</a>
-                                        <a class="btn-sm app-btn-secondary" th:href="@{'/group/leaveGroup?name='+ ${user.name}}">Delete</a>
+                                        <a class="btn-sm app-btn-secondary"
+                                           th:href="@{'/task/viewTaskUserGroup?name='+ ${user.name}}">View task</a>
+                                        <a class="btn-sm app-btn-secondary"
+                                           th:href="@{'/group/leaveGroup?name='+ ${user.name}}">Delete</a>
 
                                     </div><!--//col-->
                                 </div><!--//row-->
                             </div><!--//item-->
                             <div class="item border-bottom py-3">
                                 <div class="row justify-content-between align-items-center">
-                                    <div class="col-auto" style="display: flex" >
+                                    <div class="col-auto" style="display: flex">
                                         <div class="item-label" style="margin-right: 50px; width: 120px">
                                             <strong> Total member </strong></div>
                                         <div class="item-data"><span class="badge bg-success" th:text="${2}"></span>
@@ -145,5 +147,6 @@
 
     <!-- Page Specific JS -->
     <script th:src="@{/js/app.js}"></script>
+</div>
 </body>
 </html>

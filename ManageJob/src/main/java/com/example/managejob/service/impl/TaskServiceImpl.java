@@ -29,7 +29,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 
 @Service
 public class TaskServiceImpl implements TaskService {
@@ -61,7 +60,7 @@ public class TaskServiceImpl implements TaskService {
     public void createTask(TaskDTO taskDTO, Model model, Principal principal) {
         Task task = modelMapper.map(taskDTO, Task.class);
         int k = 0;
-        Pattern pattern = Pattern.compile("^[a-zA-Z0-9 ]{4,150}$");
+        Pattern pattern = Pattern.compile("^[^{]{4,150}$");
         Matcher m = pattern.matcher(task.getName());
         Task taskCheck = taskRepository.findByName(task.getName());
         if (taskCheck != null) {
@@ -93,14 +92,14 @@ public class TaskServiceImpl implements TaskService {
         int size = 8;
         Pageable pageagle = PageRequest.of(page, size);
         int idCurrentUser = (int) session.getAttribute("idCurrentUser");
-        Page<TaskDTO> pageTask = null;
+        Page<TaskDTO> pageTask;
         if (name == null && group == null && startDate == null && endDate == null) {
             List<TaskDTO> listD = taskRepository.findAll().stream().map(task
-                    -> modelMapper.map(task, TaskDTO.class)).collect(Collectors.toList());
+                    -> modelMapper.map(task, TaskDTO.class)).toList();
             pageTask = ConvertListToPage.toPage(listD, pageagle);
         } else {
             List<TaskDTO> listD = taskRepository.search(startDate, endDate, group, name, idCurrentUser, pageagle).stream().map(task
-                    -> modelMapper.map(task, TaskDTO.class)).collect(Collectors.toList());
+                    -> modelMapper.map(task, TaskDTO.class)).toList();
             pageTask = ConvertListToPage.toPage(listD, pageagle);
         }
         model.addAttribute("name", name);
@@ -119,7 +118,7 @@ public class TaskServiceImpl implements TaskService {
         int size = 8;
         Pageable pageagle = PageRequest.of(page, size);
         List<TaskDTO> listD = taskRepository.findListByStatus(status1, pageagle).stream().map(task
-                -> modelMapper.map(task, TaskDTO.class)).collect(Collectors.toList());
+                -> modelMapper.map(task, TaskDTO.class)).toList();
         Page<TaskDTO> pageUser = ConvertListToPage.toPage(listD, pageagle);
         model.addAttribute("listD", pageUser.getContent());
         model.addAttribute("totalPage", pageUser.getTotalPages());
@@ -136,7 +135,7 @@ public class TaskServiceImpl implements TaskService {
         int id = (int) session.getAttribute("idCurrentUser");
         Pageable pageagle = PageRequest.of(page, size);
         List<TaskDTO> listD = taskRepository.findListByStatusId(status1, id, pageagle).stream().map(task
-                -> modelMapper.map(task, TaskDTO.class)).collect(Collectors.toList());
+                -> modelMapper.map(task, TaskDTO.class)).toList();
         Page<TaskDTO> pageUser = ConvertListToPage.toPage(listD, pageagle);
         model.addAttribute("listD", pageUser.getContent());
         model.addAttribute("totalPage", pageUser.getTotalPages());
@@ -179,7 +178,7 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public void ExportData(HttpServletResponse response) {
+    public void exportData(HttpServletResponse response) {
         response.setContentType("application/octet-stream");
         String headerKey = "Content-Disposition";
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd_HH");
@@ -202,7 +201,7 @@ public class TaskServiceImpl implements TaskService {
         int size = 7;
         Pageable pageagle = PageRequest.of(page, size);
         List<TaskDTO> listD = taskRepository.findAll().stream().map(task
-                -> modelMapper.map(task, TaskDTO.class)).collect(Collectors.toList());
+                -> modelMapper.map(task, TaskDTO.class)).toList();
         Page<TaskDTO> pageUser = ConvertListToPage.toPage(listD, pageagle);
         model.addAttribute("listD", pageUser.getContent());
         model.addAttribute("totalPage", pageUser.getTotalPages());
@@ -215,19 +214,23 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public void myTask(Integer page, Model model, Integer pageToDo) {
+        model.addAttribute("dateStart", "2000-01-01");
+        String date = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
+        model.addAttribute("dateEnd", date);
+
         int size = 7;
         //phan trang + get all list
         page = (page == null || page < 0) ? 0 : page;
         Pageable pageagle = PageRequest.of(page, size);
         int id = (int) session.getAttribute("idCurrentUser");
-        List<TaskDTO> listTask = taskRepository.findAll().stream().map(task
-                -> modelMapper.map(task, TaskDTO.class)).collect(Collectors.toList());
+        List<TaskDTO> listTask = taskRepository.findListUserById(id).stream().map(task
+                -> modelMapper.map(task, TaskDTO.class)).toList();
         Page<TaskDTO> pageUser = ConvertListToPage.toPage(listTask, pageagle);
         model.addAttribute("listD", pageUser.getContent());
         model.addAttribute("totalPage", pageUser.getTotalPages());
         model.addAttribute("page", page);
         model.addAttribute("size", size);
-        long count = taskRepository.count();
+        long count =pageUser.getSize() + 1;
         model.addAttribute("count", count);
         // phan trang + get Todo List
         pageToDo = (pageToDo == null || pageToDo < 0) ? 0 : pageToDo;
@@ -238,29 +241,29 @@ public class TaskServiceImpl implements TaskService {
         model.addAttribute("totalPageToDo", pageTodoList.getTotalPages());
 
         List<TaskDTO> listReview = taskRepository.findListByStatusId("Review", id, pageagle).stream().map(task
-                -> modelMapper.map(task, TaskDTO.class)).collect(Collectors.toList());
+                -> modelMapper.map(task, TaskDTO.class)).toList();
         Page<TaskDTO> pageReviewList = ConvertListToPage.toPage(listReview, pageagle);
         model.addAttribute("listReview", pageReviewList.getContent());
 
         List<TaskDTO> listDone = taskRepository.findListByStatusId("Done", id, pageagle).stream().map(task
-                -> modelMapper.map(task, TaskDTO.class)).collect(Collectors.toList());
+                -> modelMapper.map(task, TaskDTO.class)).toList();
         Page<TaskDTO> pageDoneList = ConvertListToPage.toPage(listDone, pageagle);
         model.addAttribute("listDone", pageDoneList.getContent());
 
         List<TaskDTO> listInProgress = taskRepository.findListByStatusId("In progress", id, pageagle).stream().map(task
-                -> modelMapper.map(task, TaskDTO.class)).collect(Collectors.toList());
+                -> modelMapper.map(task, TaskDTO.class)).toList();
         Page<TaskDTO> pageInProgressList = ConvertListToPage.toPage(listInProgress, pageagle);
         model.addAttribute("listInProgress", pageInProgressList.getContent());
 
         List<TaskDTO> listCancel = taskRepository.findListByStatusId("Cancel", id, pageagle).stream().map(task
-                -> modelMapper.map(task, TaskDTO.class)).collect(Collectors.toList());
+                -> modelMapper.map(task, TaskDTO.class)).toList();
         Page<TaskDTO> pageCancelList = ConvertListToPage.toPage(listCancel, pageagle);
         model.addAttribute("listCancel", pageCancelList.getContent());
 
-        List<TaskDTO> listExperid = taskRepository.findListByStatusId("Experid", id, pageagle).stream().map(task
-                -> modelMapper.map(task, TaskDTO.class)).collect(Collectors.toList());
-        Page<TaskDTO> pageExperidList = ConvertListToPage.toPage(listExperid, pageagle);
-        model.addAttribute("listExperid", pageExperidList.getContent());
+        List<TaskDTO> listExpired = taskRepository.checkEndDate(id).stream().map(task
+                -> modelMapper.map(task, TaskDTO.class)).toList();
+        Page<TaskDTO> pageExpired = ConvertListToPage.toPage(listExpired, pageagle);
+        model.addAttribute("listExpired", pageExpired.getContent());
     }
 
     @Override
@@ -272,7 +275,7 @@ public class TaskServiceImpl implements TaskService {
         Pageable pageagle = PageRequest.of(page, size);
         int id = userRepository.findByName(name).getId();
         List<TaskDTO> listUser = taskRepository.findAllTaskByUserGroup(id, (int) session.getAttribute("idGroup"), pageagle).stream().map(task
-                -> modelMapper.map(task, TaskDTO.class)).collect(Collectors.toList());
+                -> modelMapper.map(task, TaskDTO.class)).toList();
         Page<TaskDTO> pageUser = ConvertListToPage.toPage(listUser, pageagle);
         model.addAttribute("listD", pageUser.getContent());
         model.addAttribute("totalPage", pageUser.getTotalPages());
@@ -284,34 +287,34 @@ public class TaskServiceImpl implements TaskService {
         // phan trang + get
         pageToDo = (pageToDo == null || pageToDo < 0) ? 0 : pageToDo;
         List<TaskDTO> listToDo = taskRepository.findListByUserGroup("Todo List", id, (int) session.getAttribute("idGroup"), pageagle).stream().map(task
-                -> modelMapper.map(task, TaskDTO.class)).collect(Collectors.toList());
+                -> modelMapper.map(task, TaskDTO.class)).toList();
         Page<TaskDTO> pageTodoList = ConvertListToPage.toPage(listToDo, pageagle);
         model.addAttribute("listToDo", pageTodoList.getContent());
         model.addAttribute("pageToDo", pageToDo);
         model.addAttribute("totalPageToDo", pageTodoList.getTotalPages());
 
         List<TaskDTO> listReview = taskRepository.findListByUserGroup("Review", id, (int) session.getAttribute("idGroup"), pageagle).stream().map(task
-                -> modelMapper.map(task, TaskDTO.class)).collect(Collectors.toList());
+                -> modelMapper.map(task, TaskDTO.class)).toList();
         Page<TaskDTO> pageReviewList = ConvertListToPage.toPage(listReview, pageagle);
         model.addAttribute("listReview", pageReviewList.getContent());
 
         List<TaskDTO> listDone = taskRepository.findListByUserGroup("Done", id, (int) session.getAttribute("idGroup"), pageagle).stream().map(task
-                -> modelMapper.map(task, TaskDTO.class)).collect(Collectors.toList());
+                -> modelMapper.map(task, TaskDTO.class)).toList();
         Page<TaskDTO> pageDoneList = ConvertListToPage.toPage(listDone, pageagle);
         model.addAttribute("listDone", pageDoneList.getContent());
 
         List<TaskDTO> listInProgress = taskRepository.findListByUserGroup("In Progress", id, (int) session.getAttribute("idGroup"), pageagle).stream().map(task
-                -> modelMapper.map(task, TaskDTO.class)).collect(Collectors.toList());
+                -> modelMapper.map(task, TaskDTO.class)).toList();
         Page<TaskDTO> pageInProgressList = ConvertListToPage.toPage(listInProgress, pageagle);
         model.addAttribute("listInProgress", pageInProgressList.getContent());
 
         List<TaskDTO> listCancel = taskRepository.findListByUserGroup("Cancel", id, (int) session.getAttribute("idGroup"), pageagle).stream().map(task
-                -> modelMapper.map(task, TaskDTO.class)).collect(Collectors.toList());
+                -> modelMapper.map(task, TaskDTO.class)).toList();
         Page<TaskDTO> pageCancelList = ConvertListToPage.toPage(listCancel, pageagle);
         model.addAttribute("listCancel", pageCancelList.getContent());
 
         List<TaskDTO> listExperid = taskRepository.findListByUserGroup("Experid", id, (int) session.getAttribute("idGroup"), pageagle).stream().map(task
-                -> modelMapper.map(task, TaskDTO.class)).collect(Collectors.toList());
+                -> modelMapper.map(task, TaskDTO.class)).toList();
         Page<TaskDTO> pageExperidList = ConvertListToPage.toPage(listExperid, pageagle);
         model.addAttribute("listExperid", pageExperidList.getContent());
     }
@@ -328,22 +331,6 @@ public class TaskServiceImpl implements TaskService {
         Pattern pattern = Pattern.compile("^[a-zA-Z0-9 ]{4,150}$");
         Matcher m = pattern.matcher(task.getName());
 
-        Pattern pattern2 = Pattern.compile("^[0-9]{0,150}$");
-        Matcher m2 = pattern2.matcher(task.getSpentTime());
-
-        if (!m2.find()) {
-            model.addAttribute("errSpentTime", "enter number ");
-            k = 1;
-        }
-
-        Pattern pattern1 = Pattern.compile("^[0-9]{0,150}$");
-        Matcher m1 = pattern1.matcher(task.getEstimateHourse());
-
-        if (!m1.find()) {
-            model.addAttribute("errEstimateHourse", "enter number ");
-            k = 1;
-        }
-
         Task taskCheck = taskRepository.findByName(task.getName());
 
         if (taskCheck != null && taskCheck.getId() != (int) session.getAttribute("idEditTask")) {
@@ -358,8 +345,7 @@ public class TaskServiceImpl implements TaskService {
 
         if (k == 1) {
             model.addAttribute("name", task.getName());
-            model.addAttribute("spentTime", task.getSpentTime());
-            model.addAttribute("estimateHourse", task.getEstimateHourse());
+            model.addAttribute("description", task.getDescription());
             model.addAttribute("startDate", task.getStartDate());
             model.addAttribute("endDate", task.getEndDate());
             model.addAttribute("statusList", statusRepository.findAll());
@@ -371,8 +357,7 @@ public class TaskServiceImpl implements TaskService {
                 current.setId((int) session.getAttribute("idEditTask"));
                 current.setName(task.getName());
                 current.setStatus(task.getStatus());
-                current.setEstimateHourse(task.getEstimateHourse());
-                current.setSpentTime(task.getSpentTime());
+                current.setDescription(task.getDescription());
                 current.setStartDate(task.getStartDate());
                 current.setEndDate(task.getEndDate());
                 current.setModifyBy(principal.getName());
@@ -407,26 +392,25 @@ public class TaskServiceImpl implements TaskService {
                 outputStream.write(document.getContent());
                 outputStream.close();
             } catch (IOException e) {
-                throw new RuntimeException(e);
             }
         }
     }
 
     @Override
     public void viewGet(Integer id, Model model) {
-        int ID = 0;
+        int idCurrent;
         if (id != null) {
-            ID = id;
+            idCurrent = id;
         } else {
-            ID = (int) session.getAttribute("idTaskI");
+            idCurrent = (int) session.getAttribute("idTaskI");
         }
-        Task task = taskRepository.findById(ID).orElse(null);
+        Task task = taskRepository.findById(idCurrent).orElse(null);
         model.addAttribute("task", task);
-        String idTask = String.valueOf(ID);
+        String idTask = String.valueOf(idCurrent);
         session.setAttribute("idTask", idTask);
-        session.setAttribute("idTaskI", ID);
-        model.addAttribute("listC", commentRepository.searchByTaskId(ID));
-        model.addAttribute("listDocument", documentRepository.searchByTaskId(ID));
+        session.setAttribute("idTaskI", idCurrent);
+        model.addAttribute("listC", commentRepository.searchByTaskId(idCurrent));
+        model.addAttribute("listDocument", documentRepository.searchByTaskId(idCurrent));
         model.addAttribute("listStatus", statusRepository.findAll());
     }
 
@@ -450,10 +434,13 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public void changeStatus(int id){
-        Status status = statusRepository.findById(id).orElse(null);
-        int ID = (int) session.getAttribute("idTaskI");
-        Task task = taskRepository.findById(ID).orElse(null);
-        task.setStatus(status);
-        taskRepository.save(task);
+        try{
+            Status status = statusRepository.findById(id).orElse(null);
+            int idCurrent = (int) session.getAttribute("idTaskI");
+            Task task = taskRepository.findById(idCurrent).orElse(null);
+            task.setStatus(status);
+            taskRepository.save(task);
+        }catch (NullPointerException e){
+        }
     }
 }

@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>List</title>
+    <title>View Group</title>
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport"
@@ -9,11 +9,11 @@
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet"
-          href="https://use.fontawesome.com/releases/v5.1.1/css/all.css"
+          th:href="@{https://use.fontawesome.com/releases/v5.1.1/css/all.css}"
           integrity="sha384-O8whS3fhG2OnA5Kas0Y9l3cfpmYjapjI0E4theH4iuMD+pLhbf6JI0jIMfYcK3yZ"
           crossorigin="anonymous">
     <link rel="stylesheet"
-          href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          th:href="@{https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css}"
           integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
           crossorigin="anonymous">
     <link th:href="@{/css/portal.css}" rel="stylesheet"/>
@@ -121,7 +121,7 @@
                                     <div class="col-auto" style="display: flex" >
                                         <div class="item-label" style="margin-right: 50px; width: 120px">
                                             <strong> Total member </strong></div>
-                                        <div class="item-data"><span class="badge bg-success" th:text="${2}"></span>
+                                        <div style="margin-left: 350px" class="item-data"><span class="badge bg-success" th:text="${totalMember}"></span>
                                         </div>
                                     </div><!--//col-->
                                 </div><!--//row-->

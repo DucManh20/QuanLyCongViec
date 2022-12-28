@@ -13,8 +13,12 @@ import java.util.Date;
 @NoArgsConstructor
 public class CommentDTO {
     private int id;
+
     private String content;
+
     private Date createdAt;
-    private Integer user_id;
-    private Integer task_id;
+
+    private User user;
+
+    private Task task;
 }

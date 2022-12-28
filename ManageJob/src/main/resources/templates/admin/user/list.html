@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>List</title>
+    <title>List User</title>
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport"
@@ -18,7 +18,7 @@
           crossorigin="anonymous">
     <link th:href="@{/css/portal.css}" rel="stylesheet"/>
 </head>
-<body>
+<body class="app">
 <div class="col offset-0 mt-4">
 
 </div>
@@ -26,8 +26,7 @@
 <div style="margin-top: 100px" class="app-wrapper">
 
     <div class="app-content pt-3 p-md-3 p-lg-4">
-        <div class="container-xl">
-
+        <div style="margin-top: -90px" class="container-xl">
             <div class="row g-3 mb-4 align-items-center justify-content-between">
                 <div class="col-auto">
                     <h1 class="app-page-title mb-0">Users</h1>
@@ -88,21 +87,20 @@
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    <tr th:each=" user : ${listD}">
-                                        <td class="cell" th:text="${user.id}"></td>
+                                    <tr th:each=" user, iter : ${listD}">
+                                        <td class="cell" th:text="${iter.count}"></td>
                                         <td class="cell" th:text="${user.name}"></td>
                                         <td class="cell" th:text="${user.email}"></td>
-                                        <td class="cell" th:text="${user.createdAt}"></td>
+                                        <td class="cell" th:text="${#dates.format(user.createdAt, 'dd-MM-yyyy')}"></td>
                                         <td class="cell" th:text="${user.modifyBy}"></td>
                                         <td class="cell" th:text="${user.roleUser.getRole()}"></td>
                                         <td class="cell"><img style="max-width: 100px;"
                                                               th:src="@{'/user/download?filename=' + ${user.avatar}}">
                                         </td>
-                                        <td class="cell"><a th:href="@{'/user/edit?id='+${user.id}}"><i
-                                                class="fas fa-edit    "></i>Edit</a> | <a
-                                                th:href="@{'/user/delete?id='+${user.id}}"><i
-                                                class="fas fa-recycle    "></i>Delete</a>| <a
-                                                th:href="@{'/user/accountById?id='+${user.id}}"><i
+                                        <td class="cell"><a th:href="@{'/user/edit?id='+${user.id}}" class="btn-sm app-btn-secondary"><i
+                                                class="fas fa-edit    "></i>Edit</a> <a
+                                                th:href="@{'/user/delete?id='+${user.id}}" class="btn-sm app-btn-secondary">Delete</a> <a
+                                                th:href="@{'/user/accountById?id='+${user.id}}" class="btn-sm app-btn-secondary"><i
                                                 class="fas fa-recycle    "></i>View</a></td>
                                         </td>
                                     </tr>

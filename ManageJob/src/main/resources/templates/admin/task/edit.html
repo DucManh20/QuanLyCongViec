@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>List</title>
+    <title>Edit Task</title>
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport"
@@ -9,11 +9,11 @@
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet"
-          href="https://use.fontawesome.com/releases/v5.1.1/css/all.css"
+          th:href="@{https://use.fontawesome.com/releases/v5.1.1/css/all.css}"
           integrity="sha384-O8whS3fhG2OnA5Kas0Y9l3cfpmYjapjI0E4theH4iuMD+pLhbf6JI0jIMfYcK3yZ"
           crossorigin="anonymous">
     <link rel="stylesheet"
-          href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          th:href="@{https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css}"
           integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
           crossorigin="anonymous">
     <link th:href="@{/css/portal.css}" rel="stylesheet"/>
@@ -31,22 +31,15 @@
                               method="post">
                             <div class="mb-3">
                                 <label for="setting-input-1" class="form-label">Name
-                                    </svg></span></label>
+                                    </label>
                                 <input type="text" class="form-control" id="setting-input-1" th:value="${task.name}"
                                        name="name" placeholder="Enter name">
                                 <span style="color: red" th:text="${errName}"></span>
                             </div>
                             <div class="mb-3">
-                                <label for="setting-input-2" class="form-label">Enstimate Hourse</label>
-                                <input type="number" class="form-control" id="setting-input-2" th:value="${task.estimateHourse}"
-                                       name="estimateHourse" placeholder="Enter estimate hourse">
-                                <span style="color: red" th:text="${errEstimateHourse}"></span>
-                            </div>
-                            <div class="mb-3">
-                                <label for="setting-input-3" class="form-label">Spent Time</label>
-                                <input type="text" class="form-control" id="setting-input-3" th:value="${task.spentTime}"
-                                       name="spentTime" placeholder="Enter spent Time">
-                                <span style="color: red" th:text="${errSpentTime}"></span>
+                                <label for="setting-input-3" class="form-label">Description</label>
+                                <input type="text" class="form-control" id="setting-input-3" th:value="${task.description}"
+                                       name="description" placeholder="Enter description">
                             </div>
                             <div class="mb-3">
                                 <label for="setting-input-3" class="form-label">Start Date</label>
@@ -63,6 +56,8 @@
                             <div class="form-group">
                                 <label>User</label> <br> <select
                                     name="user.id">
+                                <option class="form-control"
+                                        th:value="${task.user.id}" th:text="${task.user.name}"></option>
                                 <option class="form-control" th:each="d : ${userList}"
                                         th:value="${d.id}" th:text="${d.name}"></option>
                             </select>
@@ -71,6 +66,8 @@
                             <div class="form-group">
                                 <label>Status</label> <br> <select
                                     name="status.id">
+                                <option class="form-control"
+                                        th:value="${task.status.id}" th:text="${task.status.status1}"></option>
                                 <option class="form-control" th:each="s : ${statusList}"
                                         th:value="${s.id}" th:text="${s.status1}"></option>
                             </select>

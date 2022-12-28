@@ -1,12 +1,11 @@
 <!doctype html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>List</title>
+    <title>Add User</title>
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport"
           content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
     <!-- Bootstrap CSS -->
     <link rel="stylesheet"
           href="https://use.fontawesome.com/releases/v5.1.1/css/all.css"
@@ -47,8 +46,7 @@
                     </div>
                     <div class="mb-3">
                         <label for="setting-input-3" class="form-label">Avatar</label>
-                        <input  multiple type="file" class="form-control"  value="" name = "file">
-                        <span style="color: red" th:text="${errAvatar}"></span>
+                        <input  multiple type="file" class="form-control"  name = "file">
                     </div>
 
                     <div class="mb-3">
@@ -63,6 +61,7 @@
 
                     <a class="btn app-btn-primary" th:href="@{/user/list}">List User</a>
 
+                    <span style="color: red" th:text="${success}"></span>
                 </form>
             </div><!--//app-card-body-->
 

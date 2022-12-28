@@ -1,21 +1,15 @@
 package com.example.managejob.service;
 
+import com.example.managejob.dto.CommentDTO;
 import com.example.managejob.model.Comment;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-
-import java.util.List;
+import org.springframework.ui.Model;
 
 public interface CommentService {
-    List<Comment> getAllComment();
+    Comment add(CommentDTO commentDTO);
 
-    Comment createComment(Comment comment );
+    void delete(int id);
 
-    void deleteComment(int id);
-
-    Comment getCommentById(long id);
-
-    Page<Comment> getAllComment(Pageable pageable);
+    void getList(Integer page, Model model);
 
     Long count();
 }

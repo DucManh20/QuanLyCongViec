@@ -32,7 +32,7 @@ public class StatusServiceImpl implements StatusService {
     public String createStatus(StatusDTO statusDTO, Model model) {
         Status status = modelMapper.map(statusDTO, Status.class);
         int k = 0;
-        Pattern statusP = Pattern.compile("^^[0-9a-zA-Z]{1,}$");
+        Pattern statusP = Pattern.compile("^[0-9a-zA-Z ]{1,}$");
         Matcher m2 = statusP.matcher(status.getStatus1());
 
         Status statusCheck = statusRepository.findByStatus1(status.getStatus1());
@@ -59,7 +59,7 @@ public class StatusServiceImpl implements StatusService {
         Status status = modelMapper.map(statusDTO, Status.class);
         status.setId((int) session.getAttribute("idStatus"));
         int k = 0;
-        Pattern statusP = Pattern.compile("^^[0-9a-zA-Z]{1,}$");
+        Pattern statusP = Pattern.compile("^[0-9a-zA-Z ]{1,}$");
         Matcher m2 = statusP.matcher(status.getStatus1());
         Status statusCheck = statusRepository.findByStatus1(status.getStatus1());
         if (statusCheck != null && statusCheck.getId() != (int) session.getAttribute("idStatus")) {
@@ -72,11 +72,9 @@ public class StatusServiceImpl implements StatusService {
         }
         if (k == 1) {
             model.addAttribute("status1", statusDTO.getStatus1());
-//            return "admin/status/edit";
         } else {
             model.addAttribute("success", "Edit successfully");
             statusRepository.save(status);
-//            return "redirect:/status/list";
         }
     }
 

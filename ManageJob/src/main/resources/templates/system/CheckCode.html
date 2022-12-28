@@ -1,52 +1,58 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Fogot Password</title>
-    <!-- Required meta tags -->
+    <title>CheckCode</title>
+    <!-- Meta -->
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
-          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Portal - Bootstrap 5 Admin Dashboard Template For Developers">
+    <meta name="author" content="Xiaoying Riley at 3rd Wave Media">
+    <link rel="shortcut icon" th:href="@{/favicon.ico}">
+    <!-- FontAwesome JS-->
+    <script defer th:src="@{/plugins/fontawesome/js/all.min.js}"></script>
+    <!-- App CSS -->
+    <link id="theme-style" rel="stylesheet" th:href="@{/css/portal.css}">
 </head>
-<body>
-<main class="container" style="margin-top : 100px">
-    <div class="row">
-        <div class="offset-3 col-6">
-            <form th:action="@{/system/checkCode}" method="post">
-                <div class="card">
-                    <div class="card-header">
-                        <b><h2 style="text-align: center;">Check Code</h2></b>
-                    </div>
-                    <div class="card-body">
-                        <div class="form-group">
-                            <label>Code</label>
-                            <input type="text" class="form-control" name="codeG" placeholder="Enter code">
+
+<body class="app app-login p-0">
+<div class="row g-0 app-auth-wrapper">
+    <div class="col-12 col-md-7 col-lg-6 auth-main-col text-center p-5">
+        <div class="d-flex flex-column align-content-end">
+            <div class="app-auth-body mx-auto">
+                <div class="app-auth-branding mb-4"><a class="app-logo" th:href="@{https://hrm.tda.company/dashboard}"><img class="logo-icon me-2"
+                                                                                                                            th:src="@{/images/tda.jpg}"alt="logo"></a></div>
+                <h2 class="auth-heading text-center mb-5">Check Code</h2>
+                <div class="auth-form-container text-start">
+                    <form class="auth-form login-form" th:action="@{/system/checkCode}" method="post">
+                        <div class="email mb-3">
+                            <label class="sr-only" for="signin-email">Code</label>
+                            <input id="signin-email" name="codeG" type="text" class="form-control signin-email"
+                                   placeholder="Enter Code" required="required">
                             <span style="color: red" th:text="${message}"></span>
+                        </div><!--//form-group-->
+                        <div class="text-center">
+                            <button style="margin-bottom: 10px" type="submit" class="btn app-btn-primary w-100 theme-btn mx-auto">Submit</button>
                         </div>
-
-                        <div class="card-footer text-muted">
-                            <button type="submit" class="btn btn-primary">Submit</button>
-                            <a th:href="@{/system/register}" class="btn btn-primary">Cancel</a>
-
-                        </div>
+                    </form>
+                    <div class="auth-option text-center pt-5">Back to login <a class="text-link"
+                                                                                     th:href="@{/system/login}">here</a>.
                     </div>
-                </div>
-            </form>
+                </div><!--//auth-form-container-->
+            </div><!--//auth-body-->
+        </div><!--//flex-column-->
+    </div><!--//auth-main-col-->
+    <div class="col-12 col-md-5 col-lg-6 h-100 auth-background-col">
+        <div class="auth-background-holder">
         </div>
-    </div>
-</main>
-<!-- Optional JavaScript -->
-<!-- jQuery first, then Popper.js, then Bootstrap JS -->
-<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
-        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
-        crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
-        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
-        crossorigin="anonymous"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
-        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
-        crossorigin="anonymous"></script>
+        <div class="auth-background-mask"></div>
+        <div class="auth-background-overlay p-3 p-lg-5">
+            <div class="d-flex flex-column align-content-end h-100">
+                <div class="h-100"></div>
+            </div>
+        </div><!--//auth-background-overlay-->
+    </div><!--//auth-background-col-->
+</div><!--//row-->
 </body>
 </html>
+

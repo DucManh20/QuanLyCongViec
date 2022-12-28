@@ -22,18 +22,13 @@ public class LoginService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String name) throws UsernameNotFoundException {
         com.example.managejob.model.User st = userRepo.findByName(name);
-
         // Khong ton tai st co name
         if (st == null) {
             throw new UsernameNotFoundException("not found");
         }
-        List<SimpleGrantedAuthority> list = new ArrayList<SimpleGrantedAuthority>();
-
+        List<SimpleGrantedAuthority> list = new ArrayList<>();
         list.add(new SimpleGrantedAuthority(st.getRoleUser().getRole()));
-
         User currentUser = new User(name, st.getPassword(), list);
-        System.err.println("role current user" + st.getRoleUser().getRole());
-// extend User de them thuoc tinh.
         return currentUser;
     }
 

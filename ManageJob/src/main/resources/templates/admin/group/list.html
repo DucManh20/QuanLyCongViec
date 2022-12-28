@@ -9,11 +9,11 @@
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet"
-          href="https://use.fontawesome.com/releases/v5.1.1/css/all.css"
+          th:href="@{https://use.fontawesome.com/releases/v5.1.1/css/all.css}"
           integrity="sha384-O8whS3fhG2OnA5Kas0Y9l3cfpmYjapjI0E4theH4iuMD+pLhbf6JI0jIMfYcK3yZ"
           crossorigin="anonymous">
     <link rel="stylesheet"
-          href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          th:href="@{https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css}"
           integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
           crossorigin="anonymous">
     <link th:href="@{/css/portal.css}" rel="stylesheet"/>
@@ -23,9 +23,6 @@
 
 </div>
     <div th:replace="/header.html :: main-menu"></div>
-    <!--    <div class="col offset-0 mt-4">-->
-    <!--        <div th:replace="/header.html :: main-menu"></div>-->
-    <!--    </div>-->
     <div style="margin-top: 100px" class="app-wrapper">
 
         <div class="app-content pt-3 p-md-3 p-lg-4">
@@ -113,7 +110,7 @@
                             </div><!--//app-card-body-->
                         </div><!--//app-card-->
                         <nav class="app-pagination" style="display: flex; justify-content: space-between">
-                            <p  style="width: 300px; font-weight: bold" colspan="10">Tổng <span th:text="${count}"></span> bản
+                            <p  style="width: 300px; font-weight: bold">Tổng <span th:text="${count}"></span> bản
                                 ghi trong <span th:text="${totalPage}"> </span> trang </p>
                             <ul class="pagination justify-content-right">
                                 <li th:class="${ page <= 0 ? 'page-item disabled' : 'page-item '}">

@@ -1,14 +1,11 @@
 package com.example.managejob.service;
 
 import com.example.managejob.model.Task;
-import com.example.managejob.model.User;
 import lombok.Data;
 import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.RichTextString;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -33,18 +30,9 @@ public class TaskExcelExporter {
 
         cell = row.createCell(1);
         cell.setCellValue("Name");
-//
-//        cell = row.createCell(2);
-//        cell.setCellValue("Group");
 
         cell = row.createCell(3);
         cell.setCellValue("Description");
-
-//        cell = row.createCell(4);
-//        cell.setCellValue("Start Date");
-//
-//        cell = row.createCell(5);
-//        cell.setCellValue("End Date");
 
         cell = row.createCell(6);
         cell.setCellValue("Assign");
@@ -65,18 +53,9 @@ public class TaskExcelExporter {
 
             cell = row.createCell(1);
             cell.setCellValue(task.getName());
-//
-//            cell = row.createCell(2);
-//            cell.setCellValue(task.getGroup().getName());
 
             cell = row.createCell(3);
             cell.setCellValue(task.getDescription());
-
-//            cell = row.createCell(4);
-//            cell.setCellValue(task.getStartDate());
-//
-//            cell = row.createCell(5);
-//            cell.setCellValue(task.getEndDate());
 
             cell = row.createCell(6);
             cell.setCellValue(task.getUser().getName());

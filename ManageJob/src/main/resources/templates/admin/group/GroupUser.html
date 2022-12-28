@@ -1,18 +1,18 @@
 <!doctype html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>List</title>
+    <title>My Group</title>
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport"
           content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <!-- Bootstrap CSS -->
     <link rel="stylesheet"
-          href="https://use.fontawesome.com/releases/v5.1.1/css/all.css"
+          th:href="@{https://use.fontawesome.com/releases/v5.1.1/css/all.css}"
           integrity="sha384-O8whS3fhG2OnA5Kas0Y9l3cfpmYjapjI0E4theH4iuMD+pLhbf6JI0jIMfYcK3yZ"
           crossorigin="anonymous">
     <link rel="stylesheet"
-          href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          th:href="@{https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css}"
           integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
           crossorigin="anonymous">
     <link th:href="@{/css/portal.css}" rel="stylesheet"/>
@@ -36,26 +36,30 @@
                     <div class="page-utilities">
                         <div class="row g-2 justify-content-start justify-content-md-end align-items-center">
                             <div class="col-auto">
-                                <form class="table-search-form row gx-1 align-items-center" th:action="@{/group/search}">
+                                <form class="table-search-form row gx-1 align-items-center"
+                                      th:action="@{/group/search}">
                                     <div class="col-auto">
                                         <input type="text" id="search-orders" name="nameGroup"
-                                               class="form-control search-orders" placeholder="Search by name">
+                                               class="form-control search-orders" th:value="${nameGroup}"
+                                               placeholder="Search by name">
                                     </div>
                                     <div class="col-auto">
                                         <input type="text" id="search-orders1" name="description"
-                                               class="form-control search-orders" placeholder="Search by description">
+                                               class="form-control search-orders" th:value="${description}"
+                                               placeholder="Search by description">
                                     </div>
                                     <div class="col-auto">
                                         <button type="submit" class="btn app-btn-secondary">Search</button>
                                     </div>
                                 </form>
                             </div><!--//col-->
+                            <div class="col-auto">
+                                <a th:href="@{/group/groupUser}" class="btn app-btn-secondary">View All</a>
+                            </div><!--//col-->
                         </div><!--//row-->
                     </div><!--//table-utilities-->
                 </div><!--//col-auto-->
             </div><!--//row-->
-
-
             <div class="tab-content" id="orders-table-tab-content">
                 <div class="tab-pane fade show active" id="orders-all" role="tabpanel" aria-labelledby="orders-all-tab">
                     <div class="app-card app-card-orders-table shadow-sm mb-5">
@@ -74,7 +78,7 @@
                                     </thead>
                                     <tbody>
                                     <tr th:each=" group, iter : ${listGroupUser}">
-                                        <td class="cell" th:text="${iter.count}"></td>
+                                        <td class="cell">[[${iter.count}]]</td>
                                         <td class="cell" th:text="${group.name}"></td>
                                         <td class="cell" th:text="${group.description}"></td>
                                         <td class="cell" th:text="${group.createdBy}"></td>
@@ -83,7 +87,8 @@
                                         </td>
                                         <td class="cell">
                                             <a class="btn-sm app-btn-secondary"
-                                               th:href="@{'/group/viewGroupUser?id='+${group.id}}">View</a>
+                                               th:href="@{'/group/viewGroupUser?id='+${group.id}}"><i
+                                                    class="fas fa-recycle"></i> View</a>
                                         </td>
                                     </tr>
                                     </tbody>
@@ -92,10 +97,8 @@
                         </div><!--//app-card-body-->
                     </div><!--//app-card-->
                     <nav class="app-pagination" style="display: flex; justify-content: space-between">
-                        <p style="width: 300px; font-weight: bold" colspan="10">Tổng <span th:text="${count}"></span>
-                            bản
-                            ghi </p>
-                        <!--                                trong <span th:text="${totalPage}"> </span> trang -->
+                        <p style="width: 300px; font-weight: bold" colspan="10">Total <span th:text="${count}"></span>
+                            records in the <span th:text="${totalPage}"> </span> page</p>
                         <ul class="pagination justify-content-right">
                             <li th:class="${ page <= 0 ? 'page-item disabled' : 'page-item '}">
                                 <a class="page-link" th:href="@{'/group/groupUser?page='+${page+(-1)}}">Previous</a>
@@ -105,8 +108,6 @@
                                     <a class="page-link" th:href="@{'/group/groupUser?page='+${i - 1}}">[[${i}]]</a>
                                 </li>
                             </th:block>
-                            <!--                                <li class="page-item active"><a class="page-link" th:href="@{/group/groupUser?page=0}">1</a></li>-->
-                            <!--                                <li class="page-item"><a class="page-link" th:href="@{/group/groupUser?page=1}">2</a></li>-->
                             <li th:class="${ page == (totalPage - 1) ? 'page-item disabled' : 'page-item '}">
                                 <a class="page-link" th:href="@{'/group/groupUser?page='+${page+1}}">Next</a>
                             </li>

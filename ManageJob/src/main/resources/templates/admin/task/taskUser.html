@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>List</title>
+    <title>My Task</title>
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport"
@@ -35,35 +35,43 @@
                     <div class="page-utilities">
                         <div class="row g-2 justify-content-start justify-content-md-end align-items-center">
                             <div class="col-auto">
-                                <form style="width: 700px !important;" class="table-search-form row gx-1 align-items-center" method=""
+                                <form style="width: 700px !important;"
+                                      class="table-search-form row gx-1 align-items-center" method=""
                                       th:action="@{/task/searchTaskUser}">
 
                                     <div class="col-auto">
                                         <input type="date" id="search-orders4" name="startDate"
-                                               class="form-control search-orders" placeholder="Start Date">
+                                               class="form-control search-orders" placeholder="Start Date"
+                                               th:value="${dateStart}">
                                     </div>
 
                                     <div class="col-auto">
                                         <input type="date" id="search-orders3" name="endDate"
-                                               class="form-control search-orders" placeholder="End Date">
+                                               class="form-control search-orders" placeholder="End Date"
+                                               th:value="${dateEnd}">
                                     </div>
                                     <div class="col-auto">
                                         <input type="text" id="search-orders2" name="group"
-                                               th:value="${group}" class="form-control search-orders" placeholder="Search by group">
+                                               th:value="${group}" class="form-control search-orders"
+                                               placeholder="Search by group">
                                     </div>
 
                                     <div class="col-auto">
-                                        <input  type="text" id="search-orders"
+                                        <input type="text" id="search-orders"
                                                name="name"
-                                              th:value="${name}" class="form-control search-orders" placeholder="Search by name">
+                                               th:value="${name}" class="form-control search-orders"
+                                               placeholder="Search by name">
                                     </div>
                                     <div class="col-auto">
-                                        <button style="margin-left: 8px" type="submit" class="btn app-btn-secondary">Search</button>
+                                        <button style="margin-left: 8px" type="submit" class="btn app-btn-secondary">
+                                            Search
+                                        </button>
                                     </div>
                                 </form>
                             </div><!--//col-->
                             <div class="col-auto">
-                                <a style="margin-top: 32px; " class="btn app-btn-secondary" th:href="@{/task/exportExcel}">
+                                <a style="margin-top: 32px; " class="btn app-btn-secondary"
+                                   th:href="@{/task/exportExcel}">
                                     <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-download me-1"
                                          fill="currentColor" xmlns="http://www.w3.org/2000/svg">
                                         <path fill-rule="evenodd"
@@ -81,7 +89,8 @@
             </div><!--//row-->
             <nav id="orders-table-tab" class="orders-table-tab app-nav-tabs nav shadow-sm flex-column flex-sm-row mb-4">
                 <a class="flex-sm-fill text-sm-center nav-link custom-nav-link-1 active" id="orders-all-tab"
-                   data-bs-toggle="tab" href="#orders-all" role="tab" aria-controls="orders-all" aria-selected="true" th:text="#{ALL}">All</a>
+                   data-bs-toggle="tab" href="#orders-all" role="tab" aria-controls="orders-all" aria-selected="true"
+                   th:text="#{ALL}">All</a>
                 <a class="flex-sm-fill text-sm-center nav-link custom-nav-link-1" id="orders-paid-tab"
                    data-bs-toggle="tab" href="#orders-paid" role="tab" aria-controls="orders-paid"
                    aria-selected="false" th:text="#{TODOLIST}">Todo List</a>
@@ -94,13 +103,17 @@
                 <a class="flex-sm-fill text-sm-center nav-link custom-nav-link-1" id="orders-done-tab"
                    data-bs-toggle="tab" href="#orders-done" role="tab" aria-controls="orders-done"
                    aria-selected="false" th:text="#{DONE}">Done</a>
+                <a class="flex-sm-fill text-sm-center nav-link custom-nav-link-1" id="orders-expired-tab"
+                   data-bs-toggle="tab" href="#orders-expired" role="tab" aria-controls="orders-expired"
+                   aria-selected="false">Expired</a>
                 <a class="flex-sm-fill text-sm-center nav-link custom-nav-link-1" id="orders-cancelled-tab"
                    data-bs-toggle="tab" href="#orders-cancelled" role="tab" aria-controls="orders-cancelled"
                    aria-selected="false" th:text="#{CANCEL}">Cancel</a>
             </nav>
 
             <div class="tab-content" id="orders-table-tab-content">
-                <div class="tab-pane fade show active" id="orders-all" role="tabpanel" aria-labelledby="tab">
+
+                <div class="tab-pane fade show active" id="orders-all" role="tabpanel" aria-labelledby="orders-all-tab">
                     <div class="app-card app-card-orders-table shadow-sm mb-5">
                         <div class="app-card-body">
                             <div class="table-responsive">
@@ -117,7 +130,6 @@
                                         <th class="cell" th:text="#{ASSIGN}">Assign</th>
                                         <th class="cell" th:text="#{STATUS}">Satus</th>
                                         <th class="cell" th:text="#{ACTIONS}">Actions</th>
-                                        <th></th>
                                     </tr>
                                     </thead>
                                     <tbody>
@@ -126,20 +138,46 @@
                                         <td class="cell" th:text="${task.name}"></td>
                                         <td class="cell" th:text="${task.group.name}"></td>
                                         <td class="cell" th:text="${task.description}"></td>
-                                        <td class="cell" th:text="${#dates.format(task.startDate, 'dd-MM-yyyy')}">Start Date</td>
-                                        <td class="cell" th:text="${#dates.format(task.endDate, 'dd-MM-yyyy')}">End Date</td>
+                                        <td class="cell" th:text="${#dates.format(task.startDate, 'dd-MM-yyyy')}">Start
+                                            Date
+                                        </td>
+                                        <td class="cell" th:text="${#dates.format(task.endDate, 'dd-MM-yyyy')}">End
+                                            Date
+                                        </td>
                                         <td class="cell" th:text="${task.modifyBy}"></td>
                                         <td class="cell" th:text="${task.user.name}"></td>
-                                        <td class="cell"><span class="badge bg-success"
-                                                               th:text="${task.status.status1}"></span></td>
+                                        <td class="cell">
+                                            <div th:switch="true">
+                                                <div th:case="${task.status.status1}=='Cancel'">
+                                                    <span class="badge bg-danger"
+                                                          th:text="${task.status.status1}"></span>
+                                                </div>
+                                                <div th:case="${task.status.status1}=='Done'">
+                                                    <span class="badge bg-info"
+                                                          th:text="${task.status.status1}"></span>
+                                                </div>
+                                                <div th:case="${task.status.status1}=='In Progress'">
+                                                    <span class="badge bg-dark"
+                                                          th:text="${task.status.status1}"></span>
+                                                </div>
+                                                <div th:case="${task.status.status1}=='Review'">
+                                                    <span class="badge bg-success"
+                                                          th:text="${task.status.status1}"></span>
+                                                </div>
+                                                <div th:case="${task.status.status1}=='Todo List'">
+                                                    <span class="badge bg-secondary"
+                                                          th:text="${task.status.status1}"></span>
+                                                </div>
+                                            </div>
+                                        </td>
                                         <td class="cell">
                                             <a class="btn-sm app-btn-secondary"
-                                               th:href="@{'/task/view?id='+${task.id}}" th:text="#{VIEW}">View</a></td>
+                                               th:href="@{'/task/view?id='+${task.id}}"><i
+                                                    class="fas fa-recycle"></i> View</a></td>
                                     </tr>
                                     </tbody>
                                 </table>
                             </div><!--//table-responsive-->
-
                         </div><!--//app-card-body-->
                     </div><!--//app-card-->
                     <nav class="app-pagination" style="display: flex; justify-content: space-between">
@@ -176,22 +214,24 @@
                                         <th class="cell">Assign</th>
                                         <th class="cell">Satus</th>
                                         <th class="cell">Actions</th>
-                                        <th></th>
                                     </tr>
                                     </thead>
                                     <tbody>
+                                    <tr th:each=" task, iter : ${listToDo}">
 
-
-                                    <tr th:each=" task, iter : ${listToDo}" onclick="window.location= '#'" ;>
                                         <td class="cell" th:text="${iter.count}"></td>
                                         <td class="cell" th:text="${task.name}"></td>
                                         <td class="cell" th:text="${task.group.name}"></td>
                                         <td class="cell" th:text="${task.description}"></td>
-                                        <td class="cell" th:text="${#dates.format(task.startDate, 'dd-MM-yyyy')}">Start Date</td>
-                                        <td class="cell" th:text="${#dates.format(task.endDate, 'dd-MM-yyyy')}">End Date</td>
+                                        <td class="cell" th:text="${#dates.format(task.startDate, 'dd-MM-yyyy')}">Start
+                                            Date
+                                        </td>
+                                        <td class="cell" th:text="${#dates.format(task.endDate, 'dd-MM-yyyy')}">End
+                                            Date
+                                        </td>
                                         <td class="cell" th:text="${task.modifyBy}"></td>
                                         <td class="cell" th:text="${task.user.name}"></td>
-                                        <td class="cell"><span class="badge bg-success"
+                                        <td class="cell"><span class="badge bg-secondary"
                                                                th:text="${task.status.status1}"></span></td>
                                         <td class="cell">
                                             <a class="btn-sm app-btn-secondary"
@@ -240,7 +280,6 @@
                                         <th class="cell">Assign</th>
                                         <th class="cell">Satus</th>
                                         <th class="cell">Actions</th>
-                                        <th></th>
                                     </tr>
                                     </thead>
                                     <tbody>
@@ -250,11 +289,15 @@
                                         <td class="cell" th:text="${task.name}"></td>
                                         <td class="cell" th:text="${task.group.name}"></td>
                                         <td class="cell" th:text="${task.description}"></td>
-                                        <td class="cell" th:text="${#dates.format(task.startDate, 'dd-MM-yyyy')}">Start Date</td>
-                                        <td class="cell" th:text="${#dates.format(task.endDate, 'dd-MM-yyyy')}">End Date</td>
+                                        <td class="cell" th:text="${#dates.format(task.startDate, 'dd-MM-yyyy')}">Start
+                                            Date
+                                        </td>
+                                        <td class="cell" th:text="${#dates.format(task.endDate, 'dd-MM-yyyy')}">End
+                                            Date
+                                        </td>
                                         <td class="cell" th:text="${task.modifyBy}"></td>
                                         <td class="cell" th:text="${task.user.name}"></td>
-                                        <td class="cell"><span class="badge bg-success"
+                                        <td class="cell"><span class="badge bg-dark"
                                                                th:text="${task.status.status1}"></span></td>
                                         <td class="cell">
                                             <a class="btn-sm app-btn-secondary"
@@ -304,7 +347,6 @@
                                         <th class="cell">Assign</th>
                                         <th class="cell">Satus</th>
                                         <th class="cell">Actions</th>
-                                        <th></th>
                                     </tr>
                                     </thead>
                                     <tbody>
@@ -315,8 +357,12 @@
                                         <td class="cell" th:text="${task.name}"></td>
                                         <td class="cell" th:text="${task.group.name}"></td>
                                         <td class="cell" th:text="${task.description}"></td>
-                                        <td class="cell" th:text="${#dates.format(task.startDate, 'dd-MM-yyyy')}">Start Date</td>
-                                        <td class="cell" th:text="${#dates.format(task.endDate, 'dd-MM-yyyy')}">End Date</td>
+                                        <td class="cell" th:text="${#dates.format(task.startDate, 'dd-MM-yyyy')}">Start
+                                            Date
+                                        </td>
+                                        <td class="cell" th:text="${#dates.format(task.endDate, 'dd-MM-yyyy')}">End
+                                            Date
+                                        </td>
                                         <td class="cell" th:text="${task.modifyBy}"></td>
                                         <td class="cell" th:text="${task.user.name}"></td>
                                         <td class="cell"><span class="badge bg-success"
@@ -366,7 +412,6 @@
                                         <th class="cell">Assign</th>
                                         <th class="cell">Satus</th>
                                         <th class="cell">Actions</th>
-                                        <th></th>
                                     </tr>
                                     </thead>
                                     <tbody>
@@ -377,11 +422,15 @@
                                         <td class="cell" th:text="${task.name}"></td>
                                         <td class="cell" th:text="${task.group.name}"></td>
                                         <td class="cell" th:text="${task.description}"></td>
-                                        <td class="cell" th:text="${#dates.format(task.startDate, 'dd-MM-yyyy')}">Start Date</td>
-                                        <td class="cell" th:text="${#dates.format(task.endDate, 'dd-MM-yyyy')}">End Date</td>
+                                        <td class="cell" th:text="${#dates.format(task.startDate, 'dd-MM-yyyy')}">Start
+                                            Date
+                                        </td>
+                                        <td class="cell" th:text="${#dates.format(task.endDate, 'dd-MM-yyyy')}">End
+                                            Date
+                                        </td>
                                         <td class="cell" th:text="${task.modifyBy}"></td>
                                         <td class="cell" th:text="${task.user.name}"></td>
-                                        <td class="cell"><span class="badge bg-success"
+                                        <td class="cell"><span class="badge bg-info"
                                                                th:text="${task.status.status1}"></span></td>
                                         <td class="cell">
                                             <a class="btn-sm app-btn-secondary"
@@ -412,6 +461,73 @@
                     </nav><!--//app-pagination-->
 
                 </div><!--//tab-pane-->
+                <div class="tab-pane fade" id="orders-expired" role="tabpanel" aria-labelledby="tab">
+                    <div class="app-card app-card-orders-table shadow-sm mb-5">
+                        <div class="app-card-body">
+                            <div class="table-responsive">
+                                <table class="table app-table-hover mb-0 text-left">
+                                    <thead>
+                                    <tr>
+                                        <th class="cell">ID</th>
+                                        <th class="cell">Name</th>
+                                        <th class="cell">Group</th>
+                                        <th class="cell">Description</th>
+                                        <th class="cell">Start Date</th>
+                                        <th class="cell">End Date</th>
+                                        <th class="cell">Created By</th>
+                                        <th class="cell">Assign</th>
+                                        <th class="cell">Satus</th>
+                                        <th class="cell">Actions</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+
+
+                                    <tr th:each=" task, iter : ${listExpired}">
+                                        <td class="cell" th:text="${iter.count}"></td>
+                                        <td class="cell" th:text="${task.name}"></td>
+                                        <td class="cell" th:text="${task.group.name}"></td>
+                                        <td class="cell" th:text="${task.description}"></td>
+                                        <td class="cell" th:text="${#dates.format(task.startDate, 'dd-MM-yyyy')}">Start
+                                            Date
+                                        </td>
+                                        <td class="cell" th:text="${#dates.format(task.endDate, 'dd-MM-yyyy')}">End
+                                            Date
+                                        </td>
+                                        <td class="cell" th:text="${task.modifyBy}"></td>
+                                        <td class="cell" th:text="${task.user.name}"></td>
+                                        <td class="cell"><span class="badge bg-warning"
+                                                               th:text="${task.status.status1}"></span></td>
+                                        <td class="cell">
+                                            <a class="btn-sm app-btn-secondary"
+                                               th:href="@{'/task/view?id='+${task.id}}">View</a></td>
+
+                                    </tr>
+
+                                    </tbody>
+                                </table>
+                            </div><!--//table-responsive-->
+
+                        </div><!--//app-card-body-->
+                    </div><!--//app-card-->
+                    <nav class="app-pagination" style="display: flex; justify-content: space-between">
+                        <p style="width: 300px; font-weight: bold" colspan="10">Tổng <span th:text="${count}"></span>
+                            bản
+                            ghi trong <span th:text="${totalPage}"> </span> trang </p>
+                        <ul class="pagination justify-content-right">
+                            <li th:class="${ page <= 0 ? 'page-item disabled' : 'page-item '}">
+                                <a class="page-link" th:href="@{'/task/myTask?page='+${page+(-1)}}">Previous</a>
+                            </li>
+                            <th:block th:each="i: ${#numbers.sequence(1, totalPage)}">
+                                <li th:class="${page != i - 1 ? 'page-item' : 'page-item active'} ">
+                                    <a class="page-link" th:href="@{'/task/myTask?page='+${i - 1}}">[[${i}]]</a></li>
+                            </th:block>
+                            <li th:class="${ page == (totalPage - 1) ? 'page-item disabled' : 'page-item '}">
+                                <a class="page-link" th:href="@{'/task/myTask?page='+${page+1}}">Next</a>
+                            </li>
+                        </ul>
+                    </nav><!--//app-pagination-->
+                </div><!--//tab-pane-->
                 <div class="tab-pane fade" id="orders-cancelled" role="tabpanel" aria-labelledby="tab">
                     <div class="app-card app-card-orders-table shadow-sm mb-5">
                         <div class="app-card-body">
@@ -429,7 +545,6 @@
                                         <th class="cell">Assign</th>
                                         <th class="cell">Satus</th>
                                         <th class="cell">Actions</th>
-                                        <th></th>
                                     </tr>
                                     </thead>
                                     <tbody>
@@ -440,8 +555,12 @@
                                         <td class="cell" th:text="${task.name}"></td>
                                         <td class="cell" th:text="${task.group.name}"></td>
                                         <td class="cell" th:text="${task.description}"></td>
-                                        <td class="cell" th:text="${#dates.format(task.startDate, 'dd-MM-yyyy')}">Start Date</td>
-                                        <td class="cell" th:text="${#dates.format(task.endDate, 'dd-MM-yyyy')}">End Date</td>
+                                        <td class="cell" th:text="${#dates.format(task.startDate, 'dd-MM-yyyy')}">Start
+                                            Date
+                                        </td>
+                                        <td class="cell" th:text="${#dates.format(task.endDate, 'dd-MM-yyyy')}">End
+                                            Date
+                                        </td>
                                         <td class="cell" th:text="${task.modifyBy}"></td>
                                         <td class="cell" th:text="${task.user.name}"></td>
                                         <td class="cell"><span class="badge bg-danger"
@@ -477,7 +596,6 @@
                     </nav><!--//app-pagination-->
                 </div><!--//tab-pane-->
             </div><!--//tab-content-->
-
         </div><!--//app-card-body-->
     </div><!--//app-card-->
 </div><!--//tab-pane-->

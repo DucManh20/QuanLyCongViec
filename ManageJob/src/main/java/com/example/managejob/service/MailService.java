@@ -38,4 +38,23 @@ public class MailService {
             e.printStackTrace();
         }
     }
+
+    public void sendEmailTask(String to, String subject, String body) {
+        try {
+            MimeMessage message = javaMailSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(message, StandardCharsets.UTF_8.name());
+            // load template email with content
+            Context context = new Context();
+            context.setVariable("contentMail", body);
+            String html = templateEngine.process("system/mailTask.html", context);
+            /// send email
+            helper.setTo(to);// email gui toi
+            helper.setText(html, true);// nd mail
+            helper.setSubject(subject);
+            helper.setFrom("manh7135@gmail.com");
+            javaMailSender.send(message);
+        } catch (MessagingException e) {
+            e.printStackTrace();
+        }
+    }
 }

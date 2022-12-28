@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>List</title>
+    <title>My Account</title>
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport"
@@ -77,23 +77,12 @@
                                     </div><!--//col-->
                                 </div><!--//row-->
                             </div><!--//item-->
-<!--                            <div class="item border-bottom py-3">-->
-<!--                                <div class="row justify-content-between align-items-center">-->
-<!--                                    <div class="col-auto" style="display: flex !important;">-->
-<!--                                        <div class="item-label" style="margin-right: 20px"><strong>Password</strong></div>-->
-<!--                                        <div class="item-data" >-->
-<!--                                        </div>-->
-<!--                                    </div>&lt;!&ndash;//col&ndash;&gt;-->
-<!--                                    <div class="col text-end">-->
-<!--                                        <a class="btn-sm app-btn-secondary" href="#">Change</a>-->
-<!--                                    </div>&lt;!&ndash;//col&ndash;&gt;-->
-<!--                                </div>&lt;!&ndash;//row&ndash;&gt;-->
-<!--                            </div>&lt;!&ndash;//item&ndash;&gt;-->
                         </div><!--//app-card-body-->
                         <div class="app-card-footer p-4 mt-auto">
                             <a class="btn app-btn-secondary" href="#">Edit Profile</a>
+                            <a style="margin-left: 10px" class="btn app-btn-secondary" th:href="@{/system/newPassword}">Change
+                                Password</a>
                         </div><!--//app-card-footer-->
-
                     </div><!--//app-card-->
                 </div><!--//col-->
                 <div class="col-12 col-lg-6">
@@ -119,61 +108,81 @@
                             <div class="item border-bottom py-3">
                                 <div class="row justify-content-between align-items-center">
                                     <div class="col-auto" style="display: flex">
-                                        <div class="item-label" style="margin-right:50px; width: 80px"><strong>Todo list </strong></div>
-                                        <div class="item-data"><span class="badge bg-success"  th:text="${count}"></span></div>
+                                        <div class="item-label" style="margin-right:50px; width: 80px"><strong>Todo
+                                            list </strong></div>
+                                        <div class="item-data"><span style="margin-left: 40px" class="badge bg-success"
+                                                                     th:text="${count}"></span></div>
                                     </div><!--//col-->
                                 </div><!--//row-->
                             </div><!--//item-->
                             <div class="item border-bottom py-3">
                                 <div class="row justify-content-between align-items-center">
                                     <div class="col-auto" style="display: flex">
-                                        <div class="item-label" style="margin-right: 50px; width: 80px"><strong>In Progress </strong></div>
-                                        <div class="item-data"><span class="badge bg-success"   th:text="${countI}"></span></div>
-                                    </div><!--//col-->
-<!--                                    <div class="col text-end">-->
-<!--                                        <a class="btn-sm app-btn-secondary"  th:href="@{/task/listByStatusId?status1=In Progress}">View</a>-->
-<!--                                    </div>&lt;!&ndash;//col&ndash;&gt;-->
-                                </div><!--//row-->
-                            </div><!--//item-->
-                            <div class="item border-bottom py-3">
-                                <div class="row justify-content-between align-items-center">
-                                    <div class="col-auto" style="display: flex">
-                                        <div class="item-label" style="margin-right: 50px; width: 80px"><strong>Review </strong></div>
-                                        <div class="item-data" ><span class="badge bg-success"   th:text="${countR}"></span></div>
+                                        <div class="item-label" style="margin-right: 50px; width: 80px"><strong>In
+                                            Progress </strong></div>
+                                        <div class="item-data"><span style="margin-left: 40px" class="badge bg-success"
+                                                                     th:text="${countI}"></span></div>
                                     </div><!--//col-->
                                 </div><!--//row-->
                             </div><!--//item-->
                             <div class="item border-bottom py-3">
                                 <div class="row justify-content-between align-items-center">
                                     <div class="col-auto" style="display: flex">
-                                        <div class="item-label" style="margin-right: 50px; width: 80px"><strong>Done </strong></div>
-                                        <div class="item-data" ><span class="badge bg-success"   th:text="${countD}"></span></div>
+                                        <div class="item-label" style="margin-right: 50px; width: 80px">
+                                            <strong>Review </strong></div>
+                                        <div class="item-data"><span style="margin-left: 40px" class="badge bg-success"
+                                                                     th:text="${countR}"></span></div>
                                     </div><!--//col-->
                                 </div><!--//row-->
                             </div><!--//item-->
                             <div class="item border-bottom py-3">
                                 <div class="row justify-content-between align-items-center">
                                     <div class="col-auto" style="display: flex">
-                                        <div class="item-label" style="margin-right: 50px; width: 80px" ><strong>Expired </strong></div>
-                                        <div class="item-data" >  <span  class="badge bg-danger">01</span></div>
+                                        <div class="item-label" style="margin-right: 50px; width: 80px">
+                                            <strong>Done </strong></div>
+                                        <div class="item-data"><span style="margin-left: 40px" class="badge bg-success"
+                                                                     th:text="${countD}"></span></div>
                                     </div><!--//col-->
                                 </div><!--//row-->
                             </div><!--//item-->
                             <div class="item border-bottom py-3">
                                 <div class="row justify-content-between align-items-center">
                                     <div class="col-auto" style="display: flex">
-                                        <div class="item-label" style="margin-right: 50px; width: 80px"><strong>Total </strong></div>
-                                        <div class="item-data" ><span class="badge bg-warning" th:text="${countAll}"></span></div>
+                                        <div class="item-label" style="margin-right: 50px; width: 80px">
+                                            <strong>Cancel</strong></div>
+                                        <div class="item-data"><span style="margin-left: 40px" class="badge bg-success"
+                                                                     th:text="${countC}"></span></div>
+                                    </div><!--//col-->
+                                </div><!--//row-->
+                            </div><!--//item-->
+                            <div class="item border-bottom py-3">
+                                <div class="row justify-content-between align-items-center">
+                                    <div class="col-auto" style="display: flex">
+                                        <div class="item-label" style="margin-right: 50px; width: 80px">
+                                            <strong>Total </strong></div>
+                                        <div class="item-data"><span style="margin-left: 40px" class="badge bg-primary"
+                                                                     th:text="${countAll}"></span></div>
                                     </div><!--//col-->
                                 </div><!--//row-->
                             </div><!--//item-->
 
+                            <div class="item border-bottom py-3">
+                                <div class="row justify-content-between align-items-center">
+                                    <div class="col-auto" style="display: flex">
+                                        <div class="item-label" style="margin-right: 50px; width: 80px">
+                                            <strong>Expired</strong></div>
+                                        <div class="item-data"><span style="margin-left: 40px" class="badge bg-warning"
+                                                                     th:text="${countE}"></span></div>
+                                    </div><!--//col-->
+                                </div><!--//row-->
+                            </div><!--//item-->
 
                         </div><!--//app-card-body-->
                         <div class="app-card-footer p-4 mt-auto">
                             <a class="btn app-btn-secondary" th:href="@{/}">Statistical</a>
 
-                            <a style="margin-left: 10px" class="btn app-btn-secondary" th:href="@{/task/myTask}">View Details</a>
+                            <a style="margin-left: 10px" class="btn app-btn-secondary" th:href="@{/task/myTask}">View
+                                Details</a>
                         </div><!--//app-card-footer-->
 
                     </div><!--//app-card-->

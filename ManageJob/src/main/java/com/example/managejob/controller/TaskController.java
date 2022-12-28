@@ -1,8 +1,6 @@
 package com.example.managejob.controller;
 
 import com.example.managejob.dto.TaskDTO;
-import com.example.managejob.model.Status;
-import com.example.managejob.model.Task;
 import com.example.managejob.service.TaskService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -13,7 +11,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import java.io.IOException;
 import java.security.Principal;
 import java.util.Date;
 
@@ -33,7 +30,7 @@ public class TaskController {
     @PostMapping("/view")
     public String view(@RequestParam(value = "content", required = false) String content,
                        @RequestParam(value = "document", required = false) MultipartFile multipartFile,
-                       Model model, HttpSession session, Principal principal) throws IOException {
+                       Model model, HttpSession session, Principal principal) {
         String id1 = (String) session.getAttribute("idTask");
         taskService.view(content, principal, multipartFile, model);
         return "redirect:/task/view?id=" + id1;
@@ -47,7 +44,7 @@ public class TaskController {
     }
 
     @GetMapping("/download")
-    public void download(@RequestParam("id") int id, HttpServletResponse response) throws IOException {
+    public void download(@RequestParam("id") int id, HttpServletResponse response) {
         taskService.download(id, response);
     }
 
@@ -58,7 +55,7 @@ public class TaskController {
     }
 
     @PostMapping("/add")
-    public String add(@ModelAttribute TaskDTO taskDTO, Model model, Principal principal) throws IOException {
+    public String add(@ModelAttribute TaskDTO taskDTO, Model model, Principal principal){
         taskService.createTask(taskDTO, model, principal);
         return "admin/task/add";
     }
@@ -70,7 +67,7 @@ public class TaskController {
     }
 
     @PostMapping("/edit")
-    public String edit(@ModelAttribute("task") TaskDTO taskDTO, Model model, Principal principal) throws IllegalStateException, IOException {
+    public String edit(@ModelAttribute("task") TaskDTO taskDTO, Model model, Principal principal) throws IllegalStateException {
         taskService.edit(model, taskDTO, principal);
         return "redirect:/task/list";
     }
@@ -98,7 +95,7 @@ public class TaskController {
     public String viewTaskUserGroup(Model model,
                                     @RequestParam(value = "page", required = false) Integer page,
                                     @RequestParam(value = "name", required = false) String name,
-                                    @RequestParam(value = "pageToDo", required = false) Integer pageToDo, HttpSession session) {
+                                    @RequestParam(value = "pageToDo", required = false) Integer pageToDo) {
         taskService.viewTaskUserGroup(page, pageToDo, model, name);
         return "admin/task/viewTaskUserGroup";
     }
@@ -110,7 +107,7 @@ public class TaskController {
     }
 
     @GetMapping("/listByStatusId")
-    public String listByStatusId(Model model, @RequestParam(value = "page", required = false) Integer page, @RequestParam("status1") String status1, HttpSession session) {
+    public String listByStatusId(Model model, @RequestParam(value = "page", required = false) Integer page, @RequestParam("status1") String status1) {
         taskService.listByStatusId(page, model, status1);
         return "admin/task/taskUser";
     }
@@ -129,7 +126,7 @@ public class TaskController {
 
     @GetMapping("/exportExcel")
     public void exportData(HttpServletResponse response) {
-        taskService.ExportData(response);
+        taskService.exportData(response);
     }
 
     @PostMapping("/changeStatus")

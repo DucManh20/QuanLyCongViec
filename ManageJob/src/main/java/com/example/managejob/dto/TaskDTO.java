@@ -28,6 +28,8 @@ public class TaskDTO {
 
     private String modifyBy;
 
+    private int check;
+
     private User user;
 
     private Status status;

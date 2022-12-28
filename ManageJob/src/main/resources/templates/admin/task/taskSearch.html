@@ -9,11 +9,11 @@
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet"
-          href="https://use.fontawesome.com/releases/v5.1.1/css/all.css"
+          th:href="@{https://use.fontawesome.com/releases/v5.1.1/css/all.css}"
           integrity="sha384-O8whS3fhG2OnA5Kas0Y9l3cfpmYjapjI0E4theH4iuMD+pLhbf6JI0jIMfYcK3yZ"
           crossorigin="anonymous">
     <link rel="stylesheet"
-          href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          th:href="@{https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css}"
           integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
           crossorigin="anonymous">
     <link th:href="@{/css/portal.css}" rel="stylesheet"/>
@@ -22,11 +22,11 @@
     <script th:src="@{/js/navLink.js}"></script>
 
 </head>
-<body>
+<body class="app">
 <div th:replace="/headerU.html :: main-menu"></div>
 <div style="margin-top: 100px" class="app-wrapper">
     <div class="app-content pt-3 p-md-3 p-lg-4">
-        <div class="container-xl">
+        <div class="container-xl" style="margin-top: -90px">
             <div class="row g-3 mb-4 align-items-center justify-content-between">
                 <div class="col-auto">
                     <h1 class="app-page-title mb-0">Tasks</h1>
@@ -35,19 +35,22 @@
                     <div class="page-utilities">
                         <div class="row g-2 justify-content-start justify-content-md-end align-items-center">
                             <div class="col-auto">
-                                <form style="width: 700px !important;" class="table-search-form row gx-1 align-items-center" method=""
+                                <form style="width: 700px !important;" class="table-search-form row gx-1 align-items-center" method="get"
                                       th:action="@{/task/searchTaskUser}">
 
                                     <div class="col-auto">
+                                        <label for="search-orders4"></label>
                                         <input type="date" id="search-orders4" name="startDate"
                                                th:value="${startDate}" class="form-control search-orders" placeholder="Start Date">
                                     </div>
 
                                     <div class="col-auto">
+                                        <label for="search-orders3"></label>
                                         <input type="date" id="search-orders3" name="endDate"
                                                class="form-control search-orders" placeholder="End Date">
                                     </div>
                                     <div class="col-auto">
+                                        <label for="search-orders2"></label>
                                         <input type="text" id="search-orders2" name="group"
                                                th:value="${group}" class="form-control search-orders" placeholder="Search by group">
                                     </div>
@@ -108,8 +111,34 @@
                                         <td class="cell" th:text="${#dates.format(task.endDate, 'dd-MM-yyyy')}">End Date</td>
                                         <td class="cell" th:text="${task.modifyBy}"></td>
                                         <td class="cell" th:text="${task.user.name}"></td>
-                                        <td class="cell"><span class="badge bg-success"
-                                                               th:text="${task.status.status1}"></span></td>
+                                        <td class="cell">
+                                            <div th:switch="true">
+                                                <div th:case="${task.status.status1}=='Cancel'">
+                                                    <span class="badge bg-danger"
+                                                          th:text="${task.status.status1}"></span>
+                                                </div>
+                                                <div th:case="${task.status.status1}=='Done'">
+                                                    <span class="badge bg-info"
+                                                          th:text="${task.status.status1}"></span>
+                                                </div>
+                                                <div th:case="${task.status.status1}=='Expired'">
+                                                    <span class="badge bg-warning"
+                                                          th:text="${task.status.status1}"></span>
+                                                </div>
+                                                <div th:case="${task.status.status1}=='In Progress'">
+                                                    <span class="badge bg-dark"
+                                                          th:text="${task.status.status1}"></span>
+                                                </div>
+                                                <div th:case="${task.status.status1}=='Review'">
+                                                    <span class="badge bg-success"
+                                                          th:text="${task.status.status1}"></span>
+                                                </div>
+                                                <div th:case="${task.status.status1}=='Todo List'">
+                                                    <span class="badge bg-secondary"
+                                                          th:text="${task.status.status1}"></span>
+                                                </div>
+                                            </div>
+                                        </td>
                                         <td class="cell">
                                             <a class="btn-sm app-btn-secondary"
                                                th:href="@{'/task/view?id='+${task.id}}">View</a></td>
@@ -121,7 +150,7 @@
                         </div><!--//app-card-body-->
                     </div><!--//app-card-->
                     <nav class="app-pagination" style="display: flex; justify-content: space-between">
-                        <p style="width: 300px; font-weight: bold" colspan="10">Total <span th:text="${countPageTask}"></span>
+                        <p style="width: 300px; font-weight: bold">Total <span th:text="${countPageTask}"></span>
                             records in the page </p>
                         <ul class="pagination justify-content-right">
                             <li class="page-item disabled">
@@ -141,9 +170,6 @@
         </div><!--//app-card-body-->
     </div><!--//app-card-->
 </div><!--//tab-pane-->
-</div><!--//container-fluid-->
-</div><!--//app-content-->
-</div><!--//app-wrapper-->
 </div>
 <!-- Optional JavaScript -->
 <!-- jQuery first, then Popper.js, then Bootstrap JS -->

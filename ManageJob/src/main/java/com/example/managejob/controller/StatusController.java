@@ -1,23 +1,13 @@
 package com.example.managejob.controller;
 
 import com.example.managejob.dto.StatusDTO;
-import com.example.managejob.model.Status;
 import com.example.managejob.repository.StatusRepository;
 import com.example.managejob.service.StatusService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-
-import javax.servlet.http.HttpSession;
-import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("status")
@@ -50,7 +40,7 @@ public class StatusController {
     }
 
     @PostMapping("/edit")
-    public String edit(@ModelAttribute StatusDTO statusDTO, Model model, HttpSession session) {
+    public String edit(@ModelAttribute StatusDTO statusDTO, Model model) {
         statusService.updateStatus(statusDTO, model);
         return "admin/status/edit";
     }

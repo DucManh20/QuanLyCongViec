@@ -1,18 +1,18 @@
 <!doctype html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>List</title>
+    <title>Add Task</title>
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport"
           content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <!-- Bootstrap CSS -->
     <link rel="stylesheet"
-          href="https://use.fontawesome.com/releases/v5.1.1/css/all.css"
+          th:href="@{https://use.fontawesome.com/releases/v5.1.1/css/all.css}"
           integrity="sha384-O8whS3fhG2OnA5Kas0Y9l3cfpmYjapjI0E4theH4iuMD+pLhbf6JI0jIMfYcK3yZ"
           crossorigin="anonymous">
     <link rel="stylesheet"
-          href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          th:href="@{https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css}"
           integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
           crossorigin="anonymous">
     <link th:href="@{/css/portal.css}" rel="stylesheet"/>
@@ -21,7 +21,7 @@
 <div th:replace="/header.html :: main-menu"></div>
 <div style="margin-top: 100px" class="app-wrapper">
     <div class="app-content pt-3 p-md-3 p-lg-4">
-        <div class="container-xl">
+        <div style="margin-top: -90px" class="container-xl">
             <h1 class="app-page-title">Add new task</h1>
             <div class="row g-4 settings-section">
                 <div class="app-card app-card-settings shadow-sm p-4">
@@ -30,7 +30,7 @@
                               method="post">
                             <div class="mb-3">
                                 <label for="setting-input-1" class="form-label">Name
-                                    </svg></span></label>
+                                   </label>
                                 <input type="text" class="form-control" id="setting-input-1" th:value="${name}"
                                        name="name" placeholder="Enter name">
                                 <span style="color: red" th:text="${errName}"></span>
@@ -52,26 +52,28 @@
                                        name="endDate" placeholder="Enter end date">
                                 <span style="color: red" th:text="${errEndDate}"></span>
                             </div>
-                            <div class="mb-3">
-                                <label>User</label> <br> <select
-                                    name="user.id">
-                                <option class="form-control" th:each="d : ${userList}"
-                                        th:value="${d.id}" th:text="${d.name}"></option>
-                            </select>
-                            </div>
-                            <div class="form-group">
-                                <label>Status</label> <br> <select
-                                    name="status.id">
-                                <option class="form-control" th:each="s : ${statusList}"
-                                        th:value="${s.id}" th:text="${s.status1}"></option>
-                            </select>
-                            </div>
-                            <div class="form-group">
-                                <label>Status</label> <br> <select
-                                    name="group.id">
-                                <option class="form-control" th:each="s : ${groupList}"
-                                        th:value="${s.id}" th:text="${s.name}"></option>
-                            </select>
+                            <div style="display: flex;">
+                                <div class="mb-3">
+                                    <label>User</label> <br> <select
+                                        name="user.id">
+                                    <option class="form-control" th:each="d : ${userList}"
+                                            th:value="${d.id}" th:text="${d.name}"></option>
+                                </select>
+                                </div>
+                                <div class="form-group" style="margin-left: 50px">
+                                    <label>Status</label> <br> <select
+                                        name="status.id">
+                                    <option class="form-control" th:each="s : ${statusList}"
+                                            th:value="${s.id}" th:text="${s.status1}"></option>
+                                </select>
+                                </div>
+                                <div class="form-group" style="margin-left: 50px">
+                                    <label>Group</label> <br> <select
+                                        name="group.id">
+                                    <option class="form-control" th:each="s : ${groupList}"
+                                            th:value="${s.id}" th:text="${s.name}"></option>
+                                </select>
+                                </div>
                             </div>
                             <span style="color: red" th:text="${success}"></span>
                             <button type="submit" class="btn app-btn-primary">Save Changes</button>
