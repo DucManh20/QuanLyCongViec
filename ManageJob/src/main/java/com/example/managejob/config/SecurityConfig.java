@@ -1,6 +1,5 @@
 package com.example.managejob.config;
 
-import com.example.managejob.controller.OAuth2LoginSuccessHandler;
 import com.example.managejob.service.CustomOAuth2UserService;
 import com.example.managejob.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,12 +13,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.core.oidc.user.DefaultOidcUser;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
-
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-
 
 @Configuration
 @EnableWebSecurity
@@ -42,12 +38,8 @@ public class SecurityConfig {
                 .userService(auth2UserService).and().successHandler(new AuthenticationSuccessHandler() {
                     @Override
                     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
-                                                        Authentication authentication) throws IOException, ServletException {
-
+                                                        Authentication authentication) throws IOException{
                         DefaultOidcUser oauthUser = (DefaultOidcUser) authentication.getPrincipal();
-                        String email = oauthUser.getAttribute("email");
-                        String name = oauthUser.getAttribute("name");
-                        System.err.println("Customer's email: " + email);
                 userService.processOAuthPostLogin(oauthUser.getEmail());
                 response.sendRedirect("/");
                     }

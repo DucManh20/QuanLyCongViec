@@ -7,6 +7,9 @@ import com.example.managejob.service.SystemService;
 import com.example.managejob.service.UserService;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -42,14 +45,19 @@ public class SystemController {
     }
 
     @GetMapping("/login")
-    public String login(Model model, @RequestParam(name = "e", required = false) String error
-            , @RequestParam(name = "g-recaptcha-response", required = false) String captchaResponse) {
+    public String login(Model model, @RequestParam(name = "e", required = false) String error) {
         model.addAttribute("message", "");
         if (error != null) {
             model.addAttribute("e", error);
             logger.error("login fail");
         }
-        return "system/login";
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        if(authentication == null || authentication instanceof AnonymousAuthenticationToken){
+            return "system/login";
+        }else{
+            return "redirect:/";
+        }
     }
 
 

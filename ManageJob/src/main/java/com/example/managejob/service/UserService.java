@@ -22,7 +22,10 @@ public interface UserService {
     void editPost(User user, Principal principal, Model model)
             throws IllegalStateException, IOException;
 
-    void getList(Model model,Integer page);
+    String editProfilePost(User user, Principal principal, Model model)
+            throws IllegalStateException, IOException;
+
+    void getList(Model model, Integer page);
 
     void search(String name, Model model, Integer page);
 

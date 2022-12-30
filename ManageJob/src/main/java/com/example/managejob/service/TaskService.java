@@ -22,6 +22,8 @@ public interface TaskService {
 
     void getList(Integer page, Model model);
 
+    void search(Model model, String name);
+
     void myTask(Integer page, Model model, Integer pageToDo);
 
     void viewTaskUserGroup(Integer page, Integer pageToDo, Model model, String name);

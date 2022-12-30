@@ -15,7 +15,7 @@ public interface GroupService {
 
     void editPost(GroupUserDTO groupUserDTO, Model model, Principal principal);
 
-    void addMember(Integer id);
+    void addMember(Integer id, Model model);
 
     void addMemberPost(String emailName, Model model);
 

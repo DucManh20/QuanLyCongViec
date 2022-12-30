@@ -157,7 +157,7 @@ public class TaskServiceImpl implements TaskService {
             c.setCreatedAt(new Date(System.currentTimeMillis()));
             commentRepository.save(c);
         }
-        if (multipartFile != null) {
+        if (multipartFile.getSize() != 0) {
             String fileName = StringUtils.cleanPath(multipartFile.getOriginalFilename());
             Document d = new Document();
             d.setName(fileName);
@@ -210,6 +210,11 @@ public class TaskServiceImpl implements TaskService {
         model.addAttribute("listD", pageUser);
         long count = taskRepository.count();
         model.addAttribute("count1", count);
+    }
+    @Override
+    public void search(Model model, String name) {
+        List<Task> listD = taskRepository.searchByName(name);
+        model.addAttribute("listD", listD);
     }
 
     @Override
@@ -269,7 +274,7 @@ public class TaskServiceImpl implements TaskService {
     @Override
     public void viewTaskUserGroup(Integer page, Integer pageToDo, Model model, String name) {
         page = (page == null || page < 0) ? 0 : page;
-        int size = 10;
+        int size = 8;
         //phan trang + get all list
         page = (page == null || page < 0) ? 0 : page;
         Pageable pageagle = PageRequest.of(page, size);

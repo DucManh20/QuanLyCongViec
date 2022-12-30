@@ -9,6 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.security.Principal;
 @Controller
@@ -21,6 +22,19 @@ public class UserController {
 
     @Autowired
     RoleService roleService;
+
+    @Autowired
+    HttpSession session;
+    @GetMapping("editProfile")
+    public String editProfile(Model model) {
+        model.addAttribute("user", userService.findById((int) session.getAttribute("idCurrentUser")));
+        return "admin/user/editProfile";
+    }
+
+    @PostMapping("editProfile")
+    public String editProfilePost(@ModelAttribute("user") User user, Principal principal, Model model) throws IOException {
+       return userService.editProfilePost(user, principal, model);
+    }
 
     @GetMapping("add")
     public String add(Model model) {
@@ -86,7 +100,7 @@ public class UserController {
     public String search(@RequestParam("searchName") String name, Model model,
                          @RequestParam(value = "page", required = false) Integer page) {
         userService.search(name, model, page);
-        return "admin/user/list";
+        return "admin/user/search";
     }
 }
 

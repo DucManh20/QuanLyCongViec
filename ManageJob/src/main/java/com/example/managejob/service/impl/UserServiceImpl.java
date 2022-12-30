@@ -7,6 +7,7 @@ import com.example.managejob.repository.RoleRepository;
 import com.example.managejob.repository.StatusRepository;
 import com.example.managejob.repository.TaskRepository;
 import com.example.managejob.repository.UserRepository;
+import com.example.managejob.service.AuthenticationProvider;
 import com.example.managejob.service.UserExcelExporter;
 import com.example.managejob.service.UserService;
 import org.apache.log4j.Logger;
@@ -52,14 +53,17 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void processOAuthPostLogin(String email){
-        User user = userRepository.findByEmail(email);
-        if(user == null){
+        User userCurrent = userRepository.findByEmail(email);
+        if(userCurrent == null){
+            User user = new User();
             user.setAvatar("20190913_224545.jpg");
             user.setEmail(email);
             user.setName(email);
             user.setCreatedAt(new Date());
             user.setModifyBy(email);
+            user.setAuthenticationProvider(AuthenticationProvider.GOOGLE);
             user.setRoleUser(roleRepository.findByRole("ROLE_MEMBER"));
+            userRepository.save(user);
         }
         session.setAttribute("emailUser", email);
     }
@@ -247,6 +251,66 @@ public class UserServiceImpl implements UserService {
         }
     }
 
+    @Override
+    public String editProfilePost(User user, Principal principal, Model model)
+            throws IllegalStateException, IOException {
+        int k = 0;
+        Pattern pattern = Pattern.compile("^[^{]{4,150}$");
+        Matcher m = pattern.matcher(user.getName());
+
+        Pattern pattern2 = Pattern.compile("^[a-zA-Z0-9_!#$%&'*+/=?`{|}~^.-]+@[a-zA-Z0-9.-]+$");
+        Matcher m2 = pattern2.matcher(user.getEmail());
+
+        User userCheck = userRepository.findByName(user.getName());
+
+        User emailCheck = userRepository.findByEmail(user.getEmail());
+
+        if (userCheck != null && userCheck.getId() != (int) session.getAttribute("idCurrentUser")) {
+            model.addAttribute("errName", "Duplicate username");
+            k = 1;
+        }
+
+        if (emailCheck != null && emailCheck.getId() != (int) session.getAttribute("idCurrentUser")) {
+            model.addAttribute("errEmail", "Duplicate email");
+            k = 1;
+        }
+
+        if (!m.find()) {
+            model.addAttribute("errName", "Enter length greater than 4 characters and lesser 150 characters");
+            k = 1;
+        }
+
+
+        if (!m2.find()) {
+            model.addAttribute("errEmail", "Wrong format (EX: A@gmail.com)");
+            k = 1;
+        }
+
+        if (k == 1) {
+            model.addAttribute("name", user.getName());
+            model.addAttribute("email", user.getEmail());
+            model.addAttribute("pass", user.getPassword());
+            model.addAttribute("roleList", roleRepository.findAll());
+            return "admin/user/editProfile";
+        } else {
+            User current = userRepository.findById((int) session.getAttribute("idCurrentUser")).orElse(null);
+            if (current != null) {
+                // lay du lieu can update tu edit qua current, de tranh mat du lieu cu
+                current.setId((int) session.getAttribute("idCurrentUser"));
+                current.setName(user.getName());
+                current.setEmail(user.getEmail());
+                if (!user.getFile().isEmpty()) {
+                    final String UPLOAD_FOLDER = "D:/file/qlcv/user/";
+                    String filename = user.getFile().getOriginalFilename();
+                    File newFile = new File(UPLOAD_FOLDER + filename);
+                    user.getFile().transferTo(newFile);
+                    current.setAvatar(filename); // save to db
+                }
+                userRepository.save(current);
+            }
+            return "redirect:/user/account";
+        }
+    }
     @Override
     public void getList(Model model, Integer page) {
         page = (page == null || page < 0) ? 0 : page;

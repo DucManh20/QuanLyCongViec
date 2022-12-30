@@ -74,10 +74,11 @@
                                             <td class="cell" th:text="${c.user.email}"></td>
                                             <td class="cell" th:text="${c.task.name}"></td>
                                             <td class="cell" th:text="${#dates.format(c.createdAt, 'dd-MM-yyyy')}">CreatedAt</td>
-                                            <td class="cell"> <a th:href="@{'/comment/edit?id='+${c.id}}"><i
-                                                    class="fas fa-edit    "></i>Edit</a> | <a
-                                                    th:href="@{'/comment/delete?id='+${c.id}}"><i
-                                                    class="fas fa-recycle    "></i>Delete</a></td>
+                                            <td class="cell">
+                                                <a class="btn-sm app-btn-secondary"
+                                                   th:href="@{'/comment/edit?id='+${c.id}}">Edit</a>
+                                                <a class="btn-sm app-btn-secondary"
+                                                   th:href="@{'/comment/delete?id='+${c.id}}">Delete</a></td>
                                         </tr>
                                         </tbody>
 

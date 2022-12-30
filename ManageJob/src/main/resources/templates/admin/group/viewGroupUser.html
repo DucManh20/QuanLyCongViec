@@ -77,7 +77,17 @@
                                     </div><!--//col-->
                                 </div><!--//row-->
                             </div><!--//item-->
-
+                            <div class="item border-bottom py-3">
+                                <div class="row justify-content-between align-items-center">
+                                    <div class="col-auto" style="display: flex !important;">
+                                        <div class="item-label" style="margin-right: 20px">
+                                            <strong>Total Tasks in group</strong></div>
+                                        <div class="item-data">
+                                            <span class="badge bg-success" th:text="${totalTask}"></span>
+                                        </div>
+                                    </div><!--//col-->
+                                </div><!--//row-->
+                            </div><!--//item-->
                         </div><!--//app-card-body-->
                         <div class="app-card-footer p-4 mt-auto">
                             <a class="btn app-btn-secondary" th:href="@{/group/leaveGroupUser}">Leave</a>

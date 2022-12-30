@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Add Member</title>
+    <title>Edit User</title>
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport"
@@ -18,40 +18,36 @@
           crossorigin="anonymous">
     <link th:href="@{/css/portal.css}" rel="stylesheet"/>
 </head>
-<body>
-<div th:replace="/header.html :: main-menu"></div>
+<body class="app">
+<div th:replace="/headerU.html :: main-menu"></div>
 <div style="margin-top: 100px" class="app-wrapper">
     <div class="app-content pt-3 p-md-3 p-lg-4">
-        <div class="container-xl">
-            <h1 class="app-page-title">Add new member</h1>
+        <div class="container-xl" style="margin-top: -90px">
+            <h1 class="app-page-title">Edit profile</h1>
     <div class="row g-4 settings-section">
         <div class="app-card app-card-settings shadow-sm p-4">
             <div class="app-card-body">
-                <form class="settings-form" th:action="@{/group/addMember}"
-                      method="post">
+                <form class="settings-form" th:action="@{/user/editProfile}"
+                      method="post" enctype="multipart/form-data">
                     <div class="mb-3">
-                        <label for="setting-input-1" class="form-label">List Member</label>
-                        <th:block th:each="user : ${listMember}">
-                            <span class="badge bg-success"> [[${user.name}]]     </span>
-                        </th:block>
+                        <label for="setting-input-1" class="form-label">Name</label>
+                        <input type="text" class="form-control" id="setting-input-1" th:value="${user.name}" name="name" placeholder="Enter name">
+                        <span style="color: red" th:text="${errName}"></span>
                     </div>
-                </form>
-            </div><!--//app-card-body-->
-
-        </div><!--//app-card-->
-        <div class="app-card app-card-settings shadow-sm p-4">
-            <div class="app-card-body">
-                <form class="settings-form" th:action="@{/group/addMember}"
-                      method="post">
                     <div class="mb-3">
-                        <label for="setting-input-1" class="form-label">Member</label>
-                        <input type="text" class="form-control" id="setting-input-1" th:value="${emailName}" name="emailName" placeholder="Enter user name or email">
-                        <span style="color: red" th:text="${errEmailUser}"></span>
-                        <span style="color: red" th:text="${success}"></span>
+                        <label for="setting-input-2" class="form-label">Email</label>
+                        <input type="text" class="form-control" id="setting-input-2" th:value="${user.email}" name = "email" placeholder="Enter email">
+                        <span style="color: red" th:text="${errEmail}"></span>
                     </div>
+                    <div class="mb-3">
+                        <label for="setting-input-3" class="form-label">Avatar</label>
+                        <input  multiple type="file" class="form-control" id="setting-input-3" value="" name = "file">
+                        <span style="color: red" th:text="${errAvatar}"></span>
+                    </div>
+                    <button type="submit" class="btn app-btn-primary">Save Changes</button>
 
-                    <button type="submit" class="btn app-btn-primary">Add</button>
-                    <a class="btn app-btn-primary" th:href="@{/group/list}">List group</a>
+                    <a class="btn app-btn-primary" th:href="@{/user/account}">Cancel</a>
+
                 </form>
             </div><!--//app-card-body-->
 

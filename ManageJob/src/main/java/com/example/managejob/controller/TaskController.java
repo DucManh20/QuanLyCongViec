@@ -124,6 +124,13 @@ public class TaskController {
         return "admin/task/taskSearch";
     }
 
+
+    @GetMapping("/search")
+    public String search(@RequestParam("name") String name, Model model) {
+        taskService.search(model, name);
+        return "admin/task/search";
+    }
+
     @GetMapping("/exportExcel")
     public void exportData(HttpServletResponse response) {
         taskService.exportData(response);

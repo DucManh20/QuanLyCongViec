@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>List</title>
+    <title>List Task</title>
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport"
@@ -20,26 +20,25 @@
 </head>
 <body class="app">
 <div class="col offset-0 mt-4">
-
 </div>
 <div th:replace="/header.html :: main-menu"></div>
 <div style="margin-top: 100px" class="app-wrapper">
 
     <div class="app-content pt-3 p-md-3 p-lg-4">
-        <div style="margin-top: -90px" class="container-xl">
+        <div style="margin-top: -90px;" class="container-xl">
 
             <div class="row g-3 mb-4 align-items-center justify-content-between">
                 <div class="col-auto">
-                    <h1 class="app-page-title mb-0">Status</h1>
+                    <h1 class="app-page-title mb-0">Tasks</h1>
                 </div>
                 <div class="col-auto">
                     <div class="page-utilities">
                         <div class="row g-2 justify-content-start justify-content-md-end align-items-center">
                             <div class="col-auto">
                                 <form class="table-search-form row gx-1 align-items-center"
-                                      th:action="@{/status/search}">
+                                      th:action="@{/task/search}">
                                     <div class="col-auto">
-                                        <input type="text" id="search-orders" name="nameStatus"
+                                        <input type="text" id="search-orders" name="name"
                                                class="form-control search-orders" placeholder="Search">
                                     </div>
                                     <div class="col-auto">
@@ -48,14 +47,26 @@
                                 </form>
                             </div><!--//col-->
                             <div class="col-auto">
-                                <a th:href="@{/status/add}" class="btn app-btn-secondary">Add new status</a>
+                                <a th:href="@{/task/add}" class="btn app-btn-secondary">Add new task</a>
+                            </div>
+                            <div class="col-auto">
+                                <a th:href="@{/task/list}" class="btn app-btn-secondary">View All</a>
                             </div>
                         </div><!--//row-->
                     </div><!--//table-utilities-->
                 </div><!--//col-auto-->
             </div><!--//row-->
+            <nav id="orders-table-tab" class="orders-table-tab app-nav-tabs nav shadow-sm flex-column flex-sm-row mb-4">
+                <a class="flex-sm-fill text-sm-center nav-link active"  th:href="@{/task/list}" role="tab" >All</a>
+                <a class="flex-sm-fill text-sm-center nav-link" th:href="@{/task/listByStatus?status1=Todo List}" role="tab" >Todo List</a>
+                <a class="flex-sm-fill text-sm-center nav-link" th:href="@{/task/listByStatus?status1=In Progress}" role="tab" aria-controls="orders-paid" aria-selected="true">In Progress</a>
+                <a class="flex-sm-fill text-sm-center nav-link" th:href="@{/task/listByStatus?status1=Review}" role="tab" aria-controls="orders-pending" aria-selected="true">Review</a>
+                <a class="flex-sm-fill text-sm-center nav-link" th:href="@{/task/listByStatus?status1=Done}" role="tab" aria-controls="orders-cancelled" aria-selected="true">Done</a>
+            </nav>
+
             <div class="tab-content" id="orders-table-tab-content">
-                <div class="tab-pane fade show active" id="orders-all" role="tabpanel" aria-labelledby="orders-all-tab">
+                <div class="tab-pane fade show active" id="orders-all" role="tabpanel"
+                     aria-labelledby="orders-all-tab">
                     <div class="app-card app-card-orders-table shadow-sm mb-5">
                         <div class="app-card-body">
                             <div class="table-responsive">
@@ -63,19 +74,33 @@
                                     <thead>
                                     <tr>
                                         <th class="cell">ID</th>
-                                        <th class="cell">Status</th>
+                                        <th class="cell">Name</th>
+                                        <th class="cell">Description</th>
+                                        <th class="cell">Start Date</th>
+                                        <th class="cell">End Date</th>
+                                        <th class="cell">Created By</th>
+                                        <th class="cell">Assign</th>
+                                        <th class="cell">Satus</th>
                                         <th class="cell">Actions</th>
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    <tr th:each=" status : ${listD}">
-                                        <td class="cell" th:text="${status.id}"></td>
-                                        <td class="cell" th:text="${status.status1}"></td>
-                                        <td class="cell">
-                                            <a class="btn-sm app-btn-secondary"
-                                               th:href="@{'/status/edit?id='+${status.id}}">Edit</a>
-                                            <a class="btn-sm app-btn-secondary"
-                                               th:href="@{'/status/delete?id='+${status.id}}">Delete</a></td>
+                                    <tr th:each=" task, iter : ${listD}">
+                                        <td class="cell" th:text="${iter.count}"></td>
+                                        <td class="cell" th:text="${task.name}"></td>
+                                        <td class="cell" th:text="${task.description}"></td>
+
+                                        <td class="cell" th:text="${#dates.format(task.startDate, 'dd-MM-yyyy')}">Start Date</td>
+                                        <td class="cell" th:text="${#dates.format(task.endDate, 'dd-MM-yyyy')}">End Date</td>
+                                        <td class="cell" th:text="${task.modifyBy}"></td>
+                                        <td class="cell" th:text="${task.user.name}"></td>
+                                        <td class="cell" ><span class="badge bg-danger" th:text="${task.status.status1}"></span></td>
+                                        <td class="cell"><a th:href="@{'/task/edit?id='+${task.id}}" class="btn-sm app-btn-secondary"><i
+                                                class="fas fa-edit    "></i>Edit</a>  <a
+                                                th:href="@{'/task/delete?id='+${task.id}}" class="btn-sm app-btn-secondary"><i
+                                                class="fas fa-recycle    "></i>Delete</a> <a
+                                                th:href="@{'/task/view?id='+${task.id}}" class="btn-sm app-btn-secondary"><i
+                                                class="fas fa-recycle    "></i>View</a></td>
                                     </tr>
                                     </tbody>
 
@@ -84,27 +109,10 @@
 
                         </div><!--//app-card-body-->
                     </div><!--//app-card-->
-                    <nav class="app-pagination" style="display: flex; justify-content: space-between">
-                        <p style="width: 300px; font-weight: bold">Tổng <span th:text="${count}"></span> bản
-                            ghi trong <span th:text="${totalPage}"> </span> trang </p>
-                        <ul class="pagination justify-content-right">
-                            <li th:class="${ page <= 0 ? 'page-item disabled' : 'page-item '}">
-                                <a class="page-link" th:href="@{'/status/list?page='+${page+(-1)}}">Previous</a>
-                            </li>
-                            <th:block th:each="i: ${#numbers.sequence(1, totalPage)}">
-                                <li th:class="${page != i - 1 ? 'page-item' : 'page-item active'} ">
-                                    <a class="page-link" th:href="@{'/status/list?page='+${i - 1}}">[[${i}]]</a></li>
-                            </th:block>
-                            <li th:class="${ page == (totalPage - 1) ? 'page-item disabled' : 'page-item '}">
-                                <a class="page-link" th:href="@{'/status/list?page='+${page+1}}">Next</a>
-                            </li>
-                        </ul>
-                    </nav><!--//app-pagination-->
 
                 </div><!--//tab-pane-->
             </div><!--//container-fluid-->
         </div><!--//app-content-->
-
         <footer class="app-footer">
         </footer><!--//app-footer-->
 

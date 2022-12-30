@@ -130,8 +130,30 @@
                                         <td class="cell" th:text="${#dates.format(task.endDate, 'dd-MM-yyyy')}">End Date</td>
                                         <td class="cell" th:text="${task.modifyBy}"></td>
                                         <td class="cell" th:text="${task.user.name}"></td>
-                                        <td class="cell"><span class="badge bg-success"
-                                                               th:text="${task.status.status1}"></span></td>
+                                        <td class="cell">
+                                            <div th:switch="true">
+                                                <div th:case="${task.status.status1}=='Cancel'">
+                                                    <span class="badge bg-danger"
+                                                          th:text="${task.status.status1}"></span>
+                                                </div>
+                                                <div th:case="${task.status.status1}=='Done'">
+                                                    <span class="badge bg-info"
+                                                          th:text="${task.status.status1}"></span>
+                                                </div>
+                                                <div th:case="${task.status.status1}=='In Progress'">
+                                                    <span class="badge bg-dark"
+                                                          th:text="${task.status.status1}"></span>
+                                                </div>
+                                                <div th:case="${task.status.status1}=='Review'">
+                                                    <span class="badge bg-success"
+                                                          th:text="${task.status.status1}"></span>
+                                                </div>
+                                                <div th:case="${task.status.status1}=='Todo List'">
+                                                    <span class="badge bg-secondary"
+                                                          th:text="${task.status.status1}"></span>
+                                                </div>
+                                            </div>
+                                        </td>
                                         <td class="cell">
                                             <a class="btn-sm app-btn-secondary"
                                                th:href="@{'/task/view?id='+${task.id}}">View</a></td>

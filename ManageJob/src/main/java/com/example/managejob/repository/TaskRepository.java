@@ -1,6 +1,7 @@
 package com.example.managejob.repository;
 
 import com.example.managejob.model.Task;
+import com.example.managejob.model.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -17,6 +18,9 @@ public interface TaskRepository extends JpaRepository<Task, Integer> {
 
     @Query("SELECT u FROM Task u WHERE u.user.id =:x ")
     List<Task> findListUserById(@Param("x") int id);
+
+    @Query("SELECT u FROM Task u WHERE u.group.id =:x ")
+    List<Task> findByGroup(@Param("x") int id);
 
     @Query("SELECT u FROM Task u WHERE u.status.status1 =:x ")
     Page<Task> findListByStatus(@Param("x") String id, Pageable pageable);
@@ -40,4 +44,7 @@ public interface TaskRepository extends JpaRepository<Task, Integer> {
 
     @Query("SELECT  u FROM Task u WHERE  u.endDate <= :dateNow and u.check = 0")
     List<Task> checkEndDate(@Param("dateNow") Date dateNow);
+
+    @Query("SELECT u FROM Task u WHERE u.name LIKE %:x% ")
+    List<Task> searchByName(@Param("x") String name);
 }

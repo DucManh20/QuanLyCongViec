@@ -6,7 +6,6 @@
     <meta charset="utf-8">
     <meta name="viewport"
           content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
     <!-- Bootstrap CSS -->
     <link rel="stylesheet"
           href="https://use.fontawesome.com/releases/v5.1.1/css/all.css"
@@ -21,10 +20,8 @@
 <body class="app">
 <div th:replace="/headerU.html :: main-menu"></div>
 <div style="margin-top: 50px" class="app-wrapper">
-
     <div class="app-content pt-3 p-md-3 p-lg-4">
         <div class="container-xl" style="margin-top: -40px">
-
             <h1 class="app-page-title">Details Task</h1>
             <div class="row gy-4">
                 <div class="col-12 col-lg-6">
@@ -183,36 +180,15 @@
                             </div><!--//item-->
                         </div><!--//app-card-body-->
                         <div class="app-card-footer p-4 mt-auto">
-                            <form th:action="@{/task/changeStatus}" method="post" style="margin-top: 10px">
-                                <div class="col-auto" style="display: flex; justify-content: space-between">
-                                    <select name="id" style="margin-left: -15px;">
-                                        <option class="form-control"
-                                                th:value="${task.status.id}" th:text="${task.status.status1}"></option>
-                                        <option class="form-control" th:each="d : ${listStatus}"
-                                                th:value="${d.id}" th:text="${d.status1}"></option>
-                                    </select>
-                                    <div class="col-auto">
-                                        <input  class="btn-sm app-btn-secondary" type="submit" value="Tag">
-                                    </div>
-                                </div><!--//col-->
-                            </form>
-
-                            <form style="margin-top:7px " class="table-search-form row gx-1 align-items-center" method="post"
-                                  th:action="@{/task/view}">
+                            <form style="margin-top: 7px; " class="table-search-form row gx-1 align-items-center"
+                                  method="post" th:action="@{/task/view}" enctype="multipart/form-data">
                                 <div class="col-auto">
                                     <input style="height: 42px; width: 220px" type="text" name="content"
                                            class="form-control search-orders" placeholder="Comment" required="true">
                                 </div>
                                 <div class="col-auto">
-                                    <button type="submit" class="btn app-btn-secondary">Send</button>
-                                </div>
-                            </form>
-
-                            <form style="margin-top: 7px; " class="table-search-form row gx-1 align-items-center"
-                                  method="post" th:action="@{/task/view}" enctype="multipart/form-data">
-                                <div class="col-auto">
                                     <input style="height: 42px; width: 250px" type="file" name="document"
-                                           class="form-control search-orders" placeholder="Comment" required="true">
+                                           class="form-control search-orders" placeholder="Comment" >
                                 </div>
                                 <div class="col-auto">
                                     <button type="submit" class="btn app-btn-secondary">Upload</button>
@@ -240,5 +216,6 @@
 
     <!-- Page Specific JS -->
     <script th:src="@{/js/app.js}"></script>
+</div>
 </body>
 </html>

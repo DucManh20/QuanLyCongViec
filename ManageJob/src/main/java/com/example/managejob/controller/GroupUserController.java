@@ -59,8 +59,8 @@ public class GroupUserController {
     }
 
     @GetMapping("/addMember")
-    public String addMember(@RequestParam(name = "id", required = false) Integer id) {
-        groupService.addMember(id);
+    public String addMember(@RequestParam(name = "id", required = false) Integer id, Model model) {
+        groupService.addMember(id, model);
         return "admin/group/addMember";
     }
 

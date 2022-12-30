@@ -2,9 +2,11 @@ package com.example.managejob.service.impl;
 
 import com.example.managejob.dto.GroupUserDTO;
 import com.example.managejob.model.GroupUser;
+import com.example.managejob.model.Task;
 import com.example.managejob.model.User;
 import com.example.managejob.repository.GroupUserRepository;
 import com.example.managejob.repository.StatusRepository;
+import com.example.managejob.repository.TaskRepository;
 import com.example.managejob.repository.UserRepository;
 import com.example.managejob.service.GroupService;
 import com.example.managejob.utils.ConvertListToPage;
@@ -34,6 +36,8 @@ public class GroupServiceImpl implements GroupService {
     @Autowired
     GroupUserRepository groupUserRepository;
 
+    @Autowired
+    TaskRepository taskRepository;
 
     @Override
     public void viewGroupUser(int idGroup, Model model) {
@@ -42,8 +46,10 @@ public class GroupServiceImpl implements GroupService {
             GroupUser groupUser = groupUserRepository.findById(idGroup).orElse(null);
             model.addAttribute("group", groupUser);
             List<User> listUser = groupUser.getUsers();
+            List<Task> listTask = taskRepository.findByGroup(idGroup);
             model.addAttribute("listUser", listUser);
             model.addAttribute("totalMember", listUser.size());
+            model.addAttribute("totalTask", listTask.size());
         } catch (NullPointerException e) {
 
         }
@@ -80,8 +86,10 @@ public class GroupServiceImpl implements GroupService {
     }
 
     @Override
-    public void addMember(Integer id) {
+    public void addMember(Integer id, Model model) {
         if (id != null) {
+            GroupUser groupUser = groupUserRepository.findById(id).orElse(null);
+            model.addAttribute("listMember", groupUser.getUsers());
             session.setAttribute("groupId", id);
         }
     }
@@ -89,14 +97,20 @@ public class GroupServiceImpl implements GroupService {
     @Override
     public void addMemberPost(String emailName, Model model) {
         User user;
+        GroupUser groupUser = groupUserRepository.findById((int) session.getAttribute("groupId")).orElse(null);
+
         if (emailName.contains("@")) {
             user = userRepository.findByEmail(emailName);
         } else {
             user = userRepository.findByName(emailName);
         }
         if (user != null) {
+            List<User> listUser = groupUser.getUsers();
+            listUser.contains(user);
+            if(true){
+                model.addAttribute("success", "User already exists");
+            }
             try {
-                GroupUser groupUser = groupUserRepository.findById((int) session.getAttribute("groupId")).orElse(null);
                 List<User> ds = groupUser.getUsers();
                 ds.add(user);
                 groupUser.setUsers(ds);
@@ -110,6 +124,7 @@ public class GroupServiceImpl implements GroupService {
             String errEmailUser = "User not found!";
             model.addAttribute("errEmailUser", errEmailUser);
         }
+        model.addAttribute("listMember", groupUser.getUsers());
     }
 
     @Override
